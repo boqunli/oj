@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/jordan-wright/email"
+	uuid "github.com/satori/go.uuid"
 	"math/rand"
 	"net/smtp"
 	"net/textproto"
@@ -83,9 +84,9 @@ func SendCode(toUserEmail, code string) error {
 
 // GetUUID
 // 生成唯一码
-//func GetUUID() string {
-//	return uuid.NewV4().String()
-//}
+func GetUUID() string {
+	return uuid.NewV4().String()
+}
 
 // GetRand
 // 生成验证码
