@@ -2,12 +2,13 @@ package helper
 
 import (
 	"crypto/md5"
-	"crypto/tls"
 	"fmt"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/jordan-wright/email"
 	"math/rand"
 	"net/smtp"
+	"net/textproto"
+	"os"
 	"strconv"
 	"time"
 )
@@ -62,14 +63,22 @@ func AnalyseToken(tokenString string) (*UserClaims, error) {
 // SendCode
 // 发送验证码
 func SendCode(toUserEmail, code string) error {
-	e := email.NewEmail()
-	e.From = "Get <getcharzhaopan@163.com>"
-	e.To = []string{toUserEmail}
-	e.Subject = "验证码已发送，请查收"
-	e.HTML = []byte("您的验证码：<b>" + code + "</b>")
-	return e.SendWithTLS("smtp.163.com:465",
-		smtp.PlainAuth("", "getcharzhaopan@163.com", "123456lbq", "smtp.163.com"),
-		&tls.Config{InsecureSkipVerify: true, ServerName: "smtp.163.com"})
+	host := "smtp.qq.com"
+	port := ":25"
+	userName := "1905398049@qq.com"
+	password := os.Getenv("MAIL") // qq邮箱填授权码
+
+	e := &email.Email{
+		To:      []string{toUserEmail},
+		From:    userName,
+		Subject: "验证码已发送，请查收",
+		Text:    []byte("Text Body is, of course, supported!"),
+		HTML:    []byte("您的验证码：<b>" + code + "</b>"),
+		Headers: textproto.MIMEHeader{},
+	}
+
+	err := e.Send(host+port, smtp.PlainAuth("", userName, password, host))
+	return err
 }
 
 // GetUUID
