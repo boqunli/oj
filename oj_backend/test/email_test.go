@@ -10,7 +10,6 @@ import (
 func TestSendEmail(t *testing.T) {
 	userName := "1905398049@qq.com"
 	password := os.Getenv("MAIL") // qq邮箱填授权码
-	password = "jnmpohbldtutedeg"
 	e := email.NewEmail()
 	e.From = "Get <1905398049@qq.com>"
 	e.To = []string{"boqun.li@sjtu.edu.cn"}
