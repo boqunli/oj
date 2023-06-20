@@ -5,8 +5,11 @@ import (
 	"gorm.io/gorm"
 	"log"
 	"net/http"
+	"oj_backend/define"
 	"oj_backend/helper"
 	"oj_backend/models"
+	"strconv"
+	"strings"
 	"time"
 )
 
@@ -227,45 +230,45 @@ func Register(c *gin.Context) {
 	})
 }
 
-//// GetRankList
-//// @Tags 公共方法
-//// @Summary 用户排行榜
-//// @Param page query int false "page"
-//// @Param size query int false "size"
-//// @Success 200 {string} json "{"code":"200","data":""}"
-//// @Router /rank-list [get]
-//func GetRankList(c *gin.Context) {
-//	size, _ := strconv.Atoi(c.DefaultQuery("size", define.DefaultSize))
-//	page, err := strconv.Atoi(c.DefaultQuery("page", define.DefaultPage))
-//	if err != nil {
-//		log.Println("GetProblemList Page strconv Error:", err)
-//		return
-//	}
-//	page = (page - 1) * size
-//
-//	var count int64
-//	list := make([]*models.UserBasic, 0)
-//	err = models.DB.Model(new(models.UserBasic)).Count(&count).Order("pass_num DESC, submit_num ASC").
-//		Offset(page).Limit(size).Find(&list).Error
-//	if err != nil {
-//		c.JSON(http.StatusOK, gin.H{
-//			"code": -1,
-//			"msg":  "Get Rank List Error:" + err.Error(),
-//		})
-//		return
-//	}
-//	for _, v := range list {
-//		mail := strings.Split(v.Mail, "@")
-//		if len(mail) >= 2 {
-//			v.Mail = string(mail[0][0]) + "**@" + mail[1]
-//		}
-//	}
-//
-//	c.JSON(http.StatusOK, gin.H{
-//		"code": 200,
-//		"data": map[string]interface{}{
-//			"list":  list,
-//			"count": count,
-//		},
-//	})
-//}
+// GetRankList
+// @Tags 公共方法
+// @Summary 用户排行榜
+// @Param page query int false "page"
+// @Param size query int false "size"
+// @Success 200 {string} json "{"code":"200","data":""}"
+// @Router /rank-list [get]
+func GetRankList(c *gin.Context) {
+	size, _ := strconv.Atoi(c.DefaultQuery("size", define.DefaultSize))
+	page, err := strconv.Atoi(c.DefaultQuery("page", define.DefaultPage))
+	if err != nil {
+		log.Println("GetProblemList Page strconv Error:", err)
+		return
+	}
+	page = (page - 1) * size
+
+	var count int64
+	list := make([]*models.UserBasic, 0)
+	err = models.DB.Model(new(models.UserBasic)).Count(&count).Order("pass_num DESC, submit_num ASC").
+		Offset(page).Limit(size).Find(&list).Error
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"code": -1,
+			"msg":  "Get Rank List Error:" + err.Error(),
+		})
+		return
+	}
+	for _, v := range list {
+		mail := strings.Split(v.Mail, "@")
+		if len(mail) >= 2 {
+			v.Mail = string(mail[0][0]) + "**@" + mail[1]
+		}
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"code": 200,
+		"data": map[string]interface{}{
+			"list":  list,
+			"count": count,
+		},
+	})
+}

@@ -16,6 +16,7 @@ type ProblemBasic struct {
 	CreatedAt         time.Time          `json:"created_at"`
 	UpdatedAt         time.Time          `json:"updated_at"`
 	DeletedAt         gorm.DeletedAt     `gorm:"index;" json:"deleted_at"`
+	TestCases         []*TestCase        `gorm:"foreignKey:problem_identity;references:identity;" json:"test_cases"` // 关联测试用例表
 }
 
 func (table *ProblemBasic) TableName() string {

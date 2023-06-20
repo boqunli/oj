@@ -9,6 +9,8 @@ import (
 )
 
 func Router() *gin.Engine {
+
+	// public
 	r := gin.Default()
 	r.GET("/problem-list", service.GetProblemList)
 	r.GET("/problem-detail", service.GetProblemDetail)
@@ -17,9 +19,13 @@ func Router() *gin.Engine {
 	r.POST("/login", service.Login)
 	r.POST("/send-code", service.SendCode)
 	r.POST("/register", service.Register)
-
+	r.GET("/rank-list", service.GetRankList)
 	r.GET("/submit-list", service.GetSubmitList)
 
+	// private
+	r.GET("/problem-create", service.ProblemCreate)
+
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
+
 	return r
 }
