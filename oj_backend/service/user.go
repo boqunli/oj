@@ -87,7 +87,7 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	token, er := helper.GenerateToken(data.Identity, data.Name)
+	token, er := helper.GenerateToken(data.Identity, data.Name, data.IsAdmin)
 	if er != nil {
 		c.JSON(http.StatusOK, gin.H{
 			"code": -1,
@@ -203,6 +203,7 @@ func Register(c *gin.Context) {
 		Mail:      mail,
 		CreatedAt: time.Time(time.Now()),
 		UpdatedAt: time.Time(time.Now()),
+		IsAdmin:   0,
 	}
 	err = models.DB.Create(data).Error
 	if err != nil {
@@ -214,7 +215,7 @@ func Register(c *gin.Context) {
 	}
 
 	// 生成 token
-	token, er := helper.GenerateToken(userIdentity, name)
+	token, er := helper.GenerateToken(userIdentity, name, data.IsAdmin)
 	if er != nil {
 		c.JSON(http.StatusOK, gin.H{
 			"code": -1,

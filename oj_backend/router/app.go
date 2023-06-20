@@ -33,19 +33,19 @@ func Router() *gin.Engine {
 	authAdmin.PUT("/problem-modify", service.ProblemModify)
 	// 获取测试案例
 	authAdmin.GET("/test-case", service.GetTestCase)
-	//// 分类创建
-	//authAdmin.POST("/category-create", service.CategoryCreate)
-	//// 分类修改
-	//authAdmin.PUT("/category-modify", service.CategoryModify)
-	//// 分类删除
-	//authAdmin.DELETE("/category-delete", service.CategoryDelete)
-	//
-	//
+	// 分类创建
+	authAdmin.POST("/category-create", service.CategoryCreate)
+	// 分类修改
+	authAdmin.PUT("/category-modify", service.CategoryModify)
+	// 分类删除
+	authAdmin.DELETE("/category-delete", service.CategoryDelete)
+
 	//// 用户私有方法
 	//authUser := r.Group("/user", middlewares.AuthUserCheck())
 	//// 代码提交
 	//authUser.POST("/submit", service.Submit)
 	//
+
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 
 	return r
