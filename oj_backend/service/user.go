@@ -98,8 +98,8 @@ func Login(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"code": 200,
 		"data": map[string]interface{}{
-			"token": token,
-			//"is_admin": data.IsAdmin,
+			"token":    token,
+			"is_admin": data.IsAdmin,
 		},
 	})
 }

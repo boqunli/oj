@@ -45,19 +45,58 @@ export default [
       },
     ],
   },
-  {
-    name: 'list.table-list',
-    icon: 'table',
-    path: '/list',
-    component: './TableList',
-  },
+
   {
     path: '/',
     redirect: '/welcome',
   },
+
+  {
+    path: '/problem',
+    name: '题目',
+    icon: 'table',
+    routes: [
+      {
+        name: '列表',
+        path: '/problem/',
+        component: './Problem',
+      },
+      {
+        name: '详情',
+        path: '/problem/detail',
+        component: './Problem/Detail',
+      },
+    ],
+  },
+  {
+    path: '/admin',
+    name: '管理页',
+    icon: 'crown',
+    // access: 'canAdmin',
+    routes: [
+      {
+        path: '/admin/user',
+        name: '用户管理',
+        component: './Admin',
+      },
+      {
+        component: './404',
+      },
+    ],
+  },
+  {
+    path: '/',
+    redirect: '/index',
+  },
+  {
+    component: './404',
+  },
+
   {
     path: '*',
     layout: false,
     component: './404',
   },
+
+
 ];
