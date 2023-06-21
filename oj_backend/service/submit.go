@@ -3,6 +3,7 @@ package service
 import (
 	"bytes"
 	"errors"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 	"io"
@@ -174,7 +175,8 @@ func Submit(c *gin.Context) {
 				runtime.ReadMemStats(&em)
 
 				// 答案错误
-				if testCase.Output != out.String() {
+				if testCase.Output+"\n" != out.String() {
+					fmt.Printf("ans  = %s  == %s\n", out.String(), testCase.Output)
 					WA <- 1
 					return
 				}
@@ -250,8 +252,10 @@ func Submit(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"code": 200,
 		"data": map[string]interface{}{
-			"status": sb.Status,
-			"msg":    msg,
+			"status":   sb.Status,
+			"msg":      msg,
+			"pass_num": passCount,
+			"case_num": len(pb.TestCases),
 		},
 	})
 }
