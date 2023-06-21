@@ -13,19 +13,20 @@ func Router() *gin.Engine {
 
 	// public
 	r := gin.Default()
-	r.GET("/problem-list", service.GetProblemList)
-	r.GET("/problem-detail", service.GetProblemDetail)
+	api := r.Group("/api")
+	api.GET("/problem-list", service.GetProblemList)
+	api.GET("/problem-detail", service.GetProblemDetail)
 
-	r.GET("/user-detail", service.GetUserDetail)
-	r.POST("/login", service.Login)
-	r.POST("/send-code", service.SendCode)
-	r.POST("/register", service.Register)
-	r.GET("/rank-list", service.GetRankList)
-	r.GET("/submit-list", service.GetSubmitList)
+	api.GET("/user-detail", service.GetUserDetail)
+	api.POST("/login", service.Login)
+	api.POST("/send-code", service.SendCode)
+	api.POST("/register", service.Register)
+	api.GET("/rank-list", service.GetRankList)
+	api.GET("/submit-list", service.GetSubmitList)
 
 	// private
 	// 管理员私有方法
-	authAdmin := r.Group("/admin", middlewares.AuthAdminCheck())
+	authAdmin := api.Group("/admin", middlewares.AuthAdminCheck())
 	//authAdmin := r.Group("/admin")
 	// 问题创建
 	authAdmin.POST("/problem-create", service.ProblemCreate)
@@ -41,12 +42,12 @@ func Router() *gin.Engine {
 	authAdmin.DELETE("/category-delete", service.CategoryDelete)
 
 	//// 用户私有方法
-	authUser := r.Group("/user", middlewares.AuthUserCheck())
+	authUser := api.Group("/user", middlewares.AuthUserCheck())
 	//// 代码提交
 	authUser.POST("/submit", service.Submit)
 	//
 
-	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
+	api.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 
 	return r
 }

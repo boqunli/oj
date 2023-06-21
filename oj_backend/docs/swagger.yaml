@@ -39,7 +39,7 @@ definitions:
 info:
   contact: {}
 paths:
-  /admin/category-create:
+  /api/admin/category-create:
     post:
       parameters:
       - description: authorization
@@ -64,7 +64,7 @@ paths:
       summary: 分类创建
       tags:
       - 管理员私有方法
-  /admin/category-delete:
+  /api/admin/category-delete:
     delete:
       parameters:
       - description: authorization
@@ -85,7 +85,7 @@ paths:
       summary: 分类删除
       tags:
       - 管理员私有方法
-  /admin/category-modify:
+  /api/admin/category-modify:
     put:
       parameters:
       - description: authorization
@@ -115,7 +115,7 @@ paths:
       summary: 分类修改
       tags:
       - 管理员私有方法
-  /admin/problem-create:
+  /api/admin/problem-create:
     post:
       consumes:
       - application/json
@@ -139,7 +139,7 @@ paths:
       summary: 问题创建
       tags:
       - 管理员私有方法
-  /admin/problem-modify:
+  /api/admin/problem-modify:
     put:
       parameters:
       - description: authorization
@@ -161,7 +161,7 @@ paths:
       summary: 问题修改
       tags:
       - 管理员私有方法
-  /admin/test-case:
+  /api/admin/test-case:
     get:
       parameters:
       - description: authorization
@@ -190,7 +190,7 @@ paths:
       summary: 测试案例列表
       tags:
       - 管理员私有方法
-  /category-list:
+  /api/category-list:
     get:
       parameters:
       - description: page
@@ -213,7 +213,7 @@ paths:
       summary: 分类列表
       tags:
       - 公共方法
-  /login:
+  /api/login:
     post:
       parameters:
       - description: username
@@ -232,7 +232,7 @@ paths:
       summary: 用户登录
       tags:
       - 公共方法
-  /problem-detail:
+  /api/problem-detail:
     get:
       parameters:
       - description: problem_identity
@@ -247,7 +247,7 @@ paths:
       summary: 问题详情
       tags:
       - 公共方法
-  /problem-list:
+  /api/problem-list:
     get:
       parameters:
       - description: page
@@ -274,7 +274,7 @@ paths:
       summary: 问题列表
       tags:
       - 公共方法
-  /rank-list:
+  /api/rank-list:
     get:
       parameters:
       - description: page
@@ -293,7 +293,7 @@ paths:
       summary: 用户排行榜
       tags:
       - 公共方法
-  /register:
+  /api/register:
     post:
       parameters:
       - description: mail
@@ -328,7 +328,7 @@ paths:
       summary: 用户注册
       tags:
       - 公共方法
-  /send-code:
+  /api/send-code:
     post:
       parameters:
       - description: email
@@ -344,7 +344,7 @@ paths:
       summary: 发送验证码
       tags:
       - 公共方法
-  /submit-list:
+  /api/submit-list:
     get:
       parameters:
       - description: page
@@ -375,7 +375,7 @@ paths:
       summary: 提交列表
       tags:
       - 公共方法
-  /user-detail:
+  /api/user-detail:
     get:
       parameters:
       - description: user_identity
@@ -390,7 +390,7 @@ paths:
       summary: 用户详情
       tags:
       - 公共方法
-  /user/submit:
+  /api/user/submit:
     post:
       parameters:
       - description: authorization

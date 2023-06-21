@@ -5,10 +5,12 @@ declare namespace AUTH {
   };
 
   type LoginResult = {
-    success?: string;
-    data: {
+    code?: number;
+    data?: {
+      is_admin: number;
       token: string;
     };
+    msg?: string;
   };
 
   type LoginParams = {

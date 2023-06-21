@@ -20,7 +20,7 @@ import (
 // @Param keyword query string false "keyword"
 // @Param category_identity query string false "category_identity"
 // @Success 200 {string} json "{"code":"200","msg","","data":""}"
-// @Router /problem-list [get]
+// @Router /api/problem-list [get]
 func GetProblemList(c *gin.Context) {
 	size, err := strconv.Atoi(c.DefaultQuery("size", define.DefaultSize))
 	if err != nil {
@@ -63,7 +63,7 @@ func GetProblemList(c *gin.Context) {
 // @Summary 问题详情
 // @Param identity query string false "problem_identity"
 // @Success 200 {string} json "{"code":"200", "data":""}"
-// @Router /problem-detail [get]
+// @Router /api/problem-detail [get]
 func GetProblemDetail(c *gin.Context) {
 	identity := c.Query("identity")
 	if identity == "" {
@@ -103,7 +103,7 @@ func GetProblemDetail(c *gin.Context) {
 // @Param authorization header string true "authorization"
 // @Param data body define.ProblemBasic true "ProblemBasic"
 // @Success 200 {string} json "{"code":"200","data":""}"
-// @Router /admin/problem-create [post]
+// @Router /api/admin/problem-create [post]
 func ProblemCreate(c *gin.Context) {
 	in := new(define.ProblemBasic)
 	err := c.ShouldBindJSON(in)
@@ -183,7 +183,7 @@ func ProblemCreate(c *gin.Context) {
 // @Param authorization header string true "authorization"
 // @Param data body define.ProblemBasic true "ProblemBasic"
 // @Success 200 {string} json "{"code":"200","data":""}"
-// @Router /admin/problem-modify [put]
+// @Router /api/admin/problem-modify [put]
 func ProblemModify(c *gin.Context) {
 	in := new(define.ProblemBasic)
 	err := c.ShouldBindJSON(in)

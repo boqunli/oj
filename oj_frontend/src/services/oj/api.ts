@@ -2,7 +2,7 @@ import { request } from '@umijs/max';
 
 /** 登录接口 POST /auth/login */
 export async function login(body: AUTH.LoginParams, options?: { [key: string]: any }) {
-  return request<AUTH.LoginResult>('/auth/login', {
+  return request<AUTH.LoginResult>('/api/login', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

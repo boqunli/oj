@@ -17,7 +17,7 @@ import (
 // @Param page query int false "page"
 // @Param size query int false "size"
 // @Success 200 {string} json "{"code":"200","data":""}"
-// @Router /admin/test-case [get]
+// @Router /api/admin/test-case [get]
 func GetTestCase(c *gin.Context) {
 	size, _ := strconv.Atoi(c.DefaultQuery("size", define.DefaultSize))
 	page, err := strconv.Atoi(c.DefaultQuery("page", define.DefaultPage))

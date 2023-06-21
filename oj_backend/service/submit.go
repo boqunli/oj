@@ -28,7 +28,7 @@ import (
 // @Param user_identity query string false "user_identity"
 // @Param status query int false "status"
 // @Success 200 {string} json "{"code":"200","msg","","data":""}"
-// @Router /submit-list [get]
+// @Router /api/submit-list [get]
 func GetSubmitList(c *gin.Context) {
 	size, err := strconv.Atoi(c.DefaultQuery("size", define.DefaultSize))
 	if err != nil {
@@ -77,7 +77,7 @@ func GetSubmitList(c *gin.Context) {
 // @Param problem_identity query string true "problem_identity"
 // @Param code body string true "code"
 // @Success 200 {string} json "{"code":"200","data":""}"
-// @Router /user/submit [post]
+// @Router /api/user/submit [post]
 func Submit(c *gin.Context) {
 	problemIdentity := c.Query("problem_identity")
 	code, err := io.ReadAll(c.Request.Body)

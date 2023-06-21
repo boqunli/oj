@@ -18,7 +18,7 @@ import (
 // @Summary 用户详情
 // @Param identity query string false "user_identity"
 // @Success 200 {string} json "{"code":"200", "data":""}"
-// @Router /user-detail [get]
+// @Router /api/user-detail [get]
 func GetUserDetail(c *gin.Context) {
 	identity := c.Query("identity")
 	if identity == "" {
@@ -57,7 +57,7 @@ func GetUserDetail(c *gin.Context) {
 // @Param username formData string false "username"
 // @Param password formData string false "password"
 // @Success 200 {string} json "{"code":"200","data":""}"
-// @Router /login [post]
+// @Router /api/login [post]
 func Login(c *gin.Context) {
 	username := c.PostForm("username")
 	password := c.PostForm("password")
@@ -109,7 +109,7 @@ func Login(c *gin.Context) {
 // @Summary 发送验证码
 // @Param email formData string true "email"
 // @Success 200 {string} json "{"code":"200","data":""}"
-// @Router /send-code [post]
+// @Router /api/send-code [post]
 func SendCode(c *gin.Context) {
 	email := c.PostForm("email")
 	if email == "" {
@@ -144,7 +144,7 @@ func SendCode(c *gin.Context) {
 // @Param password formData string true "password"
 // @Param phone formData string false "phone"
 // @Success 200 {string} json "{"code":"200","data":""}"
-// @Router /register [post]
+// @Router /api/register [post]
 func Register(c *gin.Context) {
 	mail := c.PostForm("mail")
 	userCode := c.PostForm("code")
@@ -237,7 +237,7 @@ func Register(c *gin.Context) {
 // @Param page query int false "page"
 // @Param size query int false "size"
 // @Success 200 {string} json "{"code":"200","data":""}"
-// @Router /rank-list [get]
+// @Router /api/rank-list [get]
 func GetRankList(c *gin.Context) {
 	size, _ := strconv.Atoi(c.DefaultQuery("size", define.DefaultSize))
 	page, err := strconv.Atoi(c.DefaultQuery("page", define.DefaultPage))

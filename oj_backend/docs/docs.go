@@ -16,7 +16,7 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/admin/category-create": {
+        "/api/admin/category-create": {
             "post": {
                 "tags": [
                     "管理员私有方法"
@@ -54,7 +54,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/admin/category-delete": {
+        "/api/admin/category-delete": {
             "delete": {
                 "tags": [
                     "管理员私有方法"
@@ -86,7 +86,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/admin/category-modify": {
+        "/api/admin/category-modify": {
             "put": {
                 "tags": [
                     "管理员私有方法"
@@ -131,7 +131,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/admin/problem-create": {
+        "/api/admin/problem-create": {
             "post": {
                 "consumes": [
                     "application/json"
@@ -168,7 +168,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/admin/problem-modify": {
+        "/api/admin/problem-modify": {
             "put": {
                 "tags": [
                     "管理员私有方法"
@@ -202,7 +202,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/admin/test-case": {
+        "/api/admin/test-case": {
             "get": {
                 "tags": [
                     "管理员私有方法"
@@ -246,7 +246,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/category-list": {
+        "/api/category-list": {
             "get": {
                 "tags": [
                     "公共方法"
@@ -282,7 +282,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/login": {
+        "/api/login": {
             "post": {
                 "tags": [
                     "公共方法"
@@ -312,7 +312,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/problem-detail": {
+        "/api/problem-detail": {
             "get": {
                 "tags": [
                     "公共方法"
@@ -336,7 +336,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/problem-list": {
+        "/api/problem-list": {
             "get": {
                 "tags": [
                     "公共方法"
@@ -378,7 +378,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/rank-list": {
+        "/api/rank-list": {
             "get": {
                 "tags": [
                     "公共方法"
@@ -408,7 +408,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/register": {
+        "/api/register": {
             "post": {
                 "tags": [
                     "公共方法"
@@ -460,7 +460,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/send-code": {
+        "/api/send-code": {
             "post": {
                 "tags": [
                     "公共方法"
@@ -485,7 +485,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/submit-list": {
+        "/api/submit-list": {
             "get": {
                 "tags": [
                     "公共方法"
@@ -533,7 +533,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/user-detail": {
+        "/api/user-detail": {
             "get": {
                 "tags": [
                     "公共方法"
@@ -557,7 +557,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/user/submit": {
+        "/api/user/submit": {
             "post": {
                 "tags": [
                     "用户私有方法"
