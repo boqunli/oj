@@ -41,9 +41,9 @@ func Router() *gin.Engine {
 	authAdmin.DELETE("/category-delete", service.CategoryDelete)
 
 	//// 用户私有方法
-	//authUser := r.Group("/user", middlewares.AuthUserCheck())
+	authUser := r.Group("/user", middlewares.AuthUserCheck())
 	//// 代码提交
-	//authUser.POST("/submit", service.Submit)
+	authUser.POST("/submit", service.Submit)
 	//
 
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
