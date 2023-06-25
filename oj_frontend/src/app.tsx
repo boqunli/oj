@@ -1,22 +1,17 @@
 import Footer from '@/components/Footer';
-import RightContent from '@/components/RightContent';
-import { BookOutlined, LinkOutlined } from '@ant-design/icons';
-import type { RequestOptionsType, Settings as LayoutSettings } from '@ant-design/pro-components';
-import { PageLoading, SettingDrawer } from '@ant-design/pro-components';
-import { notification } from 'antd';
-import type { RequestConfig, RunTimeLayoutConfig } from 'umi';
-import { history, Link } from 'umi';
+import { Question, SelectLang } from '@/components/RightContent';
+import { LinkOutlined } from '@ant-design/icons';
+import type { Settings as LayoutSettings } from '@ant-design/pro-components';
+import { SettingDrawer } from '@ant-design/pro-components';
+import type { RunTimeLayoutConfig } from '@umijs/max';
+import { history, Link } from '@umijs/max';
 import defaultSettings from '../config/defaultSettings';
-import { currentUser as queryCurrentUser } from './services/SimpleOJ/user';
-
+import { errorConfig } from './requestErrorConfig';
+import { currentUser as queryCurrentUser } from './services/ant-design-pro/api';
+import React from 'react';
+import { AvatarDropdown, AvatarName } from './components/RightContent/AvatarDropdown';
 const isDev = process.env.NODE_ENV === 'development';
-// const isDev = false;
-const loginPath = '/login/login';
-
-/** 获取用户信息比较慢的时候会展示一个 loading */
-export const initialStateConfig = {
-  loading: <PageLoading />,
-};
+const loginPath = '/user/login';
 
 /**
  * @see  https://umijs.org/zh-CN/plugins/plugin-initial-state
@@ -28,38 +23,46 @@ export async function getInitialState(): Promise<{
   fetchUserInfo?: () => Promise<API.CurrentUser | undefined>;
 }> {
   const fetchUserInfo = async () => {
-    const token = localStorage.getItem('token');
-    console.log('fetchUserInfo', token);
     try {
-      const response = await queryCurrentUser(token ? token : '');
-      return response;
+      const msg = await queryCurrentUser({
+        skipErrorHandler: true,
+      });
+      return msg.data;
     } catch (error) {
       history.push(loginPath);
     }
     return undefined;
   };
-
   // 如果不是登录页面，执行
-  // console.log(history.location.pathname);
-  if (history.location.pathname !== loginPath) {
-    const token = localStorage.getItem('token');
-    const currentUser = await queryCurrentUser(token ? token : '');
+  const { location } = history;
+  if (location.pathname !== loginPath) {
+    const currentUser = await fetchUserInfo();
     return {
-      currentUser: currentUser,
-      settings: defaultSettings,
+      fetchUserInfo,
+      currentUser,
+      settings: defaultSettings as Partial<LayoutSettings>,
     };
   }
   return {
     fetchUserInfo,
-    settings: defaultSettings,
+    settings: defaultSettings as Partial<LayoutSettings>,
   };
 }
 
 // ProLayout 支持的api https://procomponents.ant.design/components/layout
 export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) => {
   return {
-    rightContentRender: () => <RightContent />,
-    disableContentMargin: false,
+    actionsRender: () => [<Question key="doc" />, <SelectLang key="SelectLang" />],
+    avatarProps: {
+      src: initialState?.currentUser?.avatar,
+      title: <AvatarName />,
+      render: (_, avatarChildren) => {
+        return <AvatarDropdown>{avatarChildren}</AvatarDropdown>;
+      },
+    },
+    waterMarkProps: {
+      content: initialState?.currentUser?.name,
+    },
     footerRender: () => <Footer />,
     onPageChange: () => {
       const { location } = history;
@@ -68,15 +71,31 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
         history.push(loginPath);
       }
     },
+    layoutBgImgList: [
+      {
+        src: 'https://mdn.alipayobjects.com/yuyan_qk0oxh/afts/img/D2LWSqNny4sAAAAAAAAAAAAAFl94AQBr',
+        left: 85,
+        bottom: 100,
+        height: '303px',
+      },
+      {
+        src: 'https://mdn.alipayobjects.com/yuyan_qk0oxh/afts/img/C2TWRpJpiC0AAAAAAAAAAAAAFl94AQBr',
+        bottom: -68,
+        right: -45,
+        height: '303px',
+      },
+      {
+        src: 'https://mdn.alipayobjects.com/yuyan_qk0oxh/afts/img/F6vSTbj8KpYAAAAAAAAAAAAAFl94AQBr',
+        bottom: 0,
+        left: 0,
+        width: '331px',
+      },
+    ],
     links: isDev
       ? [
           <Link key="openapi" to="/umi/plugin/openapi" target="_blank">
             <LinkOutlined />
             <span>OpenAPI 文档</span>
-          </Link>,
-          <Link to="/~docs" key="docs">
-            <BookOutlined />
-            <span>业务组件文档</span>
           </Link>,
         ]
       : [],
@@ -84,24 +103,22 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
     // 自定义 403 页面
     // unAccessible: <div>unAccessible</div>,
     // 增加一个 loading 的状态
-    childrenRender: (children: any, props: any) => {
+    childrenRender: (children) => {
       // if (initialState?.loading) return <PageLoading />;
       return (
         <>
           {children}
-          {!props.location?.pathname?.includes('/login') && (
-            <SettingDrawer
-              disableUrlParams
-              enableDarkTheme
-              settings={initialState?.settings}
-              onSettingChange={(settings) => {
-                setInitialState((preInitialState) => ({
-                  ...preInitialState,
-                  settings,
-                }));
-              }}
-            />
-          )}
+          <SettingDrawer
+            disableUrlParams
+            enableDarkTheme
+            settings={initialState?.settings}
+            onSettingChange={(settings) => {
+              setInitialState((preInitialState) => ({
+                ...preInitialState,
+                settings,
+              }));
+            }}
+          />
         </>
       );
     },
@@ -109,28 +126,11 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
   };
 };
 
-const errorHandler = (error: ResponseError) => {
-  notification.error({
-    description: '您的网络连接发生异常，无法连接至服务器',
-    message: '网络异常',
-  });
-};
-
-const authHeaderInterceptor = (url: string, options: RequestOptionsType) => {
-  const token = localStorage.getItem('token');
-  if (token !== null) {
-    const authHeader = { Authorization: '2052538' };
-    return {
-      url: url,
-      options: { ...options, interceptors: true, headers: authHeader },
-    };
-  }
-  return {
-    url: url,
-    options: { ...options, interceptors: true },
-  };
-};
-export const request: RequestConfig = {
-  errorHandler,
-  authHeaderInterceptor,
+/**
+ * @name request 配置，可以配置错误处理
+ * 它基于 axios 和 ahooks 的 useRequest 提供了一套统一的网络请求和错误处理方案。
+ * @doc https://umijs.org/docs/max/request#配置
+ */
+export const request = {
+  ...errorConfig,
 };
