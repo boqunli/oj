@@ -290,16 +290,12 @@ const docTemplate = `{
                 "summary": "用户登录",
                 "parameters": [
                     {
-                        "type": "string",
                         "description": "username",
-                        "name": "username",
-                        "in": "formData"
-                    },
-                    {
-                        "type": "string",
-                        "description": "password",
-                        "name": "password",
-                        "in": "formData"
+                        "name": "userShort",
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/definitions/define.UserShort"
+                        }
                     }
                 ],
                 "responses": {
@@ -557,6 +553,31 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/user/current-user": {
+            "get": {
+                "tags": [
+                    "用户私有方法"
+                ],
+                "summary": "获取用户",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "authorization",
+                        "name": "authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\":\"200\",\"data\":\"\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/api/user/submit": {
             "post": {
                 "tags": [
@@ -648,6 +669,17 @@ const docTemplate = `{
                 },
                 "output": {
                     "description": "输出",
+                    "type": "string"
+                }
+            }
+        },
+        "define.UserShort": {
+            "type": "object",
+            "properties": {
+                "password": {
+                    "type": "string"
+                },
+                "username": {
                     "type": "string"
                 }
             }

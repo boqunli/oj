@@ -1,24 +1,14 @@
 import { HeartTwoTone, SmileTwoTone } from '@ant-design/icons';
-import { PageContainer } from '@ant-design/pro-components';
-import { useIntl } from '@umijs/max';
+import { PageHeaderWrapper } from '@ant-design/pro-components';
 import { Alert, Card, Typography } from 'antd';
 import React from 'react';
 
 const Admin: React.FC = () => {
-  const intl = useIntl();
   return (
-    <PageContainer
-      content={intl.formatMessage({
-        id: 'pages.admin.subPage.title',
-        defaultMessage: 'This page can only be viewed by admin',
-      })}
-    >
+    <PageHeaderWrapper content="用户管理">
       <Card>
         <Alert
-          message={intl.formatMessage({
-            id: 'pages.welcome.alertMessage',
-            defaultMessage: 'Faster and stronger heavy-duty components have been released.',
-          })}
+          message=""
           type="success"
           showIcon
           banner
@@ -38,7 +28,7 @@ const Admin: React.FC = () => {
         </a>
         。
       </p>
-    </PageContainer>
+    </PageHeaderWrapper>
   );
 };
 

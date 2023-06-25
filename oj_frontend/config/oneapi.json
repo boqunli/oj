@@ -1,15 +1,15 @@
 {
   "openapi": "3.0.1",
   "info": {
-    "title": "Ant Design Pro",
+    "title": "SimpleOJ",
     "version": "1.0.0"
   },
   "servers": [
     {
-      "url": "http://localhost:8000/"
+      "url": "http://150.158.80.33:8000/"
     },
     {
-      "url": "https://localhost:8000/"
+      "url": "https://150.158.80.33:8000/"
     }
   ],
   "paths": {

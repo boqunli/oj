@@ -54,13 +54,23 @@ func GetUserDetail(c *gin.Context) {
 // Login
 // @Tags 公共方法
 // @Summary 用户登录
-// @Param username formData string false "username"
-// @Param password formData string false "password"
+// @Param userShort body define.UserShort false "username"
 // @Success 200 {string} json "{"code":"200","data":""}"
 // @Router /api/login [post]
 func Login(c *gin.Context) {
-	username := c.PostForm("username")
-	password := c.PostForm("password")
+
+	var user define.UserShort
+	if err := c.ShouldBindJSON(&user); err != nil {
+		// 返回错误信息
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	//username := c.PostForm("username")
+	//password := c.PostForm("password")
+	//fmt.Printf("username : %s \npassword: %s \n", user.Username, user.Password)
+	username := user.Username
+	password := user.Password
 	if username == "" || password == "" {
 		c.JSON(http.StatusOK, gin.H{
 			"code": -1,
@@ -100,6 +110,31 @@ func Login(c *gin.Context) {
 		"data": map[string]interface{}{
 			"token":    token,
 			"is_admin": data.IsAdmin,
+		},
+	})
+}
+
+// CurrentUser
+// @Tags 用户私有方法
+// @Summary 获取用户
+// @Param authorization header string true "authorization"
+// @Success 200 {string} json "{"code":"200","data":""}"
+// @Router /api/user/current-user [get]
+func CurrentUser(c *gin.Context) {
+	data, err := helper.AnalyseToken(c.GetHeader("Authorization"))
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"code": -1,
+			"msg":  "Get Current User Error:" + err.Error(),
+		})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"code": 200,
+		"data": map[string]interface{}{
+			"username": data.Name,
+			"userId":   data.Identity,
+			"isAdmin":  data.IsAdmin,
 		},
 	})
 }

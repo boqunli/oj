@@ -36,6 +36,13 @@ definitions:
         description: 输出
         type: string
     type: object
+  define.UserShort:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    type: object
 info:
   contact: {}
 paths:
@@ -217,13 +224,10 @@ paths:
     post:
       parameters:
       - description: username
-        in: formData
-        name: username
-        type: string
-      - description: password
-        in: formData
-        name: password
-        type: string
+        in: body
+        name: userShort
+        schema:
+          $ref: '#/definitions/define.UserShort'
       responses:
         "200":
           description: '{"code":"200","data":""}'
@@ -390,6 +394,22 @@ paths:
       summary: 用户详情
       tags:
       - 公共方法
+  /api/user/current-user:
+    get:
+      parameters:
+      - description: authorization
+        in: header
+        name: authorization
+        required: true
+        type: string
+      responses:
+        "200":
+          description: '{"code":"200","data":""}'
+          schema:
+            type: string
+      summary: 获取用户
+      tags:
+      - 用户私有方法
   /api/user/submit:
     post:
       parameters:
