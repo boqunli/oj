@@ -105,6 +105,7 @@ func Login(c *gin.Context) {
 		})
 		return
 	}
+	define.CurrentUserToken = token
 	c.JSON(http.StatusOK, gin.H{
 		"code": 200,
 		"data": map[string]interface{}{
@@ -114,14 +115,39 @@ func Login(c *gin.Context) {
 	})
 }
 
-// CurrentUser
-// @Tags 用户私有方法
-// @Summary 获取用户
-// @Param authorization header string true "authorization"
+// OutLogin
+// @Tags 公共方法
+// @Summary 用户退出登录
 // @Success 200 {string} json "{"code":"200","data":""}"
-// @Router /api/user/current-user [get]
+// @Router /api/out-login [post]
+func OutLogin(c *gin.Context) {
+	define.CurrentUserToken = ""
+	c.JSON(http.StatusOK, gin.H{
+		"code": 200,
+		"msg":  "out login success",
+	})
+}
+
+//func getCurrentUser(c *gin.Context) (userInfo models.UserBasic) {
+//	session := sessions.Default(c)
+//	userInfo = session.Get("currentUser").(models.UserBasic) // 类型转换一下
+//	return
+//}
+//
+//func setCurrentUser(c *gin.Context, userInfo models.UserBasic) {
+//	session := sessions.Default(c)
+//	session.Set("currentUser", userInfo)
+//	// 一定要Save否则不生效，若未使用gob注册User结构体，调用Save时会返回一个Error
+//	session.Save()
+//}
+
+// CurrentUser
+// @Tags 公共方法
+// @Summary 获取用户
+// @Success 200 {string} json "{"code":"200","data":""}"
+// @Router /api/current-user [get]
 func CurrentUser(c *gin.Context) {
-	data, err := helper.AnalyseToken(c.GetHeader("Authorization"))
+	data, err := helper.AnalyseToken(define.CurrentUserToken)
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
 			"code": -1,
@@ -133,8 +159,8 @@ func CurrentUser(c *gin.Context) {
 		"code": 200,
 		"data": map[string]interface{}{
 			"username": data.Name,
-			"userId":   data.Identity,
-			"isAdmin":  data.IsAdmin,
+			"userid":   data.Identity,
+			"is_admin": data.IsAdmin,
 		},
 	})
 }

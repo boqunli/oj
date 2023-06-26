@@ -3,30 +3,18 @@
 
 declare namespace API {
   type CurrentUser = {
-    name?: string;
-    avatar?: string;
+    username?: string;
     userid?: string;
-    email?: string;
-    signature?: string;
-    title?: string;
-    group?: string;
-    tags?: { key?: string; label?: string }[];
-    notifyCount?: number;
-    unreadCount?: number;
-    country?: string;
-    access?: string;
-    geographic?: {
-      province?: { label?: string; key?: string };
-      city?: { label?: string; key?: string };
-    };
-    address?: string;
-    phone?: string;
+    is_admin?: number;
   };
 
   type LoginResult = {
-    status?: string;
-    type?: string;
-    currentAuthority?: string;
+    code?: number;
+    msg?: string;
+    data?: {
+      token?: string
+      is_admin?: number
+    };
   };
 
   type PageParams = {
@@ -49,23 +37,10 @@ declare namespace API {
     progress?: number;
   };
 
-  type RuleList = {
-    data?: RuleListItem[];
-    /** 列表的内容总数 */
-    total?: number;
-    success?: boolean;
-  };
-
-  type FakeCaptcha = {
-    code?: number;
-    status?: string;
-  };
-
   type LoginParams = {
     username?: string;
     password?: string;
     autoLogin?: boolean;
-    type?: string;
   };
 
   type ErrorResponse = {

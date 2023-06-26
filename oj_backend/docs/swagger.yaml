@@ -220,6 +220,16 @@ paths:
       summary: 分类列表
       tags:
       - 公共方法
+  /api/current-user:
+    get:
+      responses:
+        "200":
+          description: '{"code":"200","data":""}'
+          schema:
+            type: string
+      summary: 获取用户
+      tags:
+      - 公共方法
   /api/login:
     post:
       parameters:
@@ -234,6 +244,16 @@ paths:
           schema:
             type: string
       summary: 用户登录
+      tags:
+      - 公共方法
+  /api/out-login:
+    post:
+      responses:
+        "200":
+          description: '{"code":"200","data":""}'
+          schema:
+            type: string
+      summary: 用户退出登录
       tags:
       - 公共方法
   /api/problem-detail:
@@ -394,22 +414,6 @@ paths:
       summary: 用户详情
       tags:
       - 公共方法
-  /api/user/current-user:
-    get:
-      parameters:
-      - description: authorization
-        in: header
-        name: authorization
-        required: true
-        type: string
-      responses:
-        "200":
-          description: '{"code":"200","data":""}'
-          schema:
-            type: string
-      summary: 获取用户
-      tags:
-      - 用户私有方法
   /api/user/submit:
     post:
       parameters:

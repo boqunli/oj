@@ -46,10 +46,10 @@ export default [
     ],
   },
   {
-    name: 'list.table-list',
-    icon: 'table',
-    path: '/list',
-    component: './TableList',
+    path: '/problem',
+    name: 'problem',
+    icon: '',
+    redirect: '/welcome',
   },
   {
     path: '/',

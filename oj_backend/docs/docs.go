@@ -282,6 +282,22 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/current-user": {
+            "get": {
+                "tags": [
+                    "公共方法"
+                ],
+                "summary": "获取用户",
+                "responses": {
+                    "200": {
+                        "description": "{\"code\":\"200\",\"data\":\"\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/api/login": {
             "post": {
                 "tags": [
@@ -298,6 +314,22 @@ const docTemplate = `{
                         }
                     }
                 ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\":\"200\",\"data\":\"\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/out-login": {
+            "post": {
+                "tags": [
+                    "公共方法"
+                ],
+                "summary": "用户退出登录",
                 "responses": {
                     "200": {
                         "description": "{\"code\":\"200\",\"data\":\"\"}",
@@ -546,31 +578,6 @@ const docTemplate = `{
                 "responses": {
                     "200": {
                         "description": "{\"code\":\"200\", \"data\":\"\"}",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/api/user/current-user": {
-            "get": {
-                "tags": [
-                    "用户私有方法"
-                ],
-                "summary": "获取用户",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "authorization",
-                        "name": "authorization",
-                        "in": "header",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "{\"code\":\"200\",\"data\":\"\"}",
                         "schema": {
                             "type": "string"
                         }

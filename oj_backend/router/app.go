@@ -19,10 +19,14 @@ func Router() *gin.Engine {
 
 	api.GET("/user-detail", service.GetUserDetail)
 	api.POST("/login", service.Login)
+	api.POST("/out-login", service.OutLogin)
+
 	api.POST("/send-code", service.SendCode)
 	api.POST("/register", service.Register)
 	api.GET("/rank-list", service.GetRankList)
 	api.GET("/submit-list", service.GetSubmitList)
+
+	api.GET("/current-user", service.CurrentUser)
 
 	// private
 	// 管理员私有方法
@@ -45,9 +49,8 @@ func Router() *gin.Engine {
 	authUser := api.Group("/user", middlewares.AuthUserCheck())
 	//// 代码提交
 	authUser.POST("/submit", service.Submit)
-	authUser.GET("/current-user", service.CurrentUser)
 
-	api.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 
 	return r
 }
