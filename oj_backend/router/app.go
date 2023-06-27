@@ -1,6 +1,8 @@
 package router
 
 import (
+	"github.com/gin-contrib/sessions"
+	"github.com/gin-contrib/sessions/cookie"
 	"github.com/gin-gonic/gin"
 	swaggerfiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
@@ -10,9 +12,11 @@ import (
 )
 
 func Router() *gin.Engine {
-
-	// public
 	r := gin.Default()
+
+	store := cookie.NewStore([]byte("secret")) // public
+	r.Use(sessions.Sessions("mysession", store))
+
 	api := r.Group("/api")
 	api.GET("/problem-list", service.GetProblemList)
 	api.GET("/problem-detail", service.GetProblemDetail)

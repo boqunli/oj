@@ -52,25 +52,62 @@ declare namespace API {
     success?: boolean;
   };
 
-  type NoticeIconList = {
-    data?: NoticeIconItem[];
-    /** 列表的内容总数 */
-    total?: number;
-    success?: boolean;
+  type TestCase = {
+    ID             ?: number;
+    CreatedAt      ?: string;
+    UpdatedAt      ?: string;
+    DeletedAt      ?: string;
+    Identity       ?: string;
+    ProblemIdentity?: string;
+    Input          ?: string;
+    Output         ?: string;
+  }
+
+  type CategoryBasic = {
+    id        :number;
+    created_at :string;
+    updated_at :string;
+    deleted_at :string;
+    identity  :string;
+    name      :string;
+    parent_id  :number;
   };
 
-  type NoticeIconItemType = 'notification' | 'message' | 'event';
+  type ProblemCategory = {
+    id            :number;
+    created_at :string;
+    updated_at :string;
+    deleted_at :string;
+    problem_id     :number;
+    category_id    :number;
+    category_basic : CategoryBasic;
+  };
 
-  type NoticeIconItem = {
-    id?: string;
-    extra?: string;
-    key?: string;
-    read?: boolean;
-    avatar?: string;
-    title?: string;
-    status?: string;
-    datetime?: string;
-    description?: string;
-    type?: NoticeIconItemType;
+  type ProblemItem = {
+    id              ?:  number;
+    identity        ?:  string;
+    ProblemCategories?: ProblemCategory[];
+    title           ?:  string;
+    content         ?:  string;
+    max_runtime      ?:  number;
+    max_mem          ?:  number;
+    created_at :string;
+    updated_at :string;
+    deleted_at :string;
+    test_cases       ?:  TestCase[];
+    pass_num         ?:  number;
+    submit_num       ?:  number;
+  };
+
+  type RegisterParams = {
+    username?: string;
+    password?: string;
+    email?:string;
+    captcha?: string;
+  };
+
+  type changePasswordParams = {
+    username?: string;
+    password?: string;
   };
 }

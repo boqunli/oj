@@ -59,6 +59,10 @@ func GetCategoryList(c *gin.Context) {
 // @Success 200 {string} json "{"code":"200","data":""}"
 // @Router /api/admin/category-create [post]
 func CategoryCreate(c *gin.Context) {
+	er0 := c.Request.ParseForm()
+	if er0 != nil {
+		return
+	}
 	name := c.PostForm("name")
 	parentId, _ := strconv.Atoi(c.PostForm("parentId"))
 	category := &models.CategoryBasic{

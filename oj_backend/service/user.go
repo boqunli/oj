@@ -105,7 +105,7 @@ func Login(c *gin.Context) {
 		})
 		return
 	}
-	define.CurrentUserToken = token
+	helper.SetCurrentUser(c, token)
 	c.JSON(http.StatusOK, gin.H{
 		"code": 200,
 		"data": map[string]interface{}{
@@ -121,25 +121,12 @@ func Login(c *gin.Context) {
 // @Success 200 {string} json "{"code":"200","data":""}"
 // @Router /api/out-login [post]
 func OutLogin(c *gin.Context) {
-	define.CurrentUserToken = ""
+	helper.SetCurrentUser(c, "")
 	c.JSON(http.StatusOK, gin.H{
 		"code": 200,
 		"msg":  "out login success",
 	})
 }
-
-//func getCurrentUser(c *gin.Context) (userInfo models.UserBasic) {
-//	session := sessions.Default(c)
-//	userInfo = session.Get("currentUser").(models.UserBasic) // 类型转换一下
-//	return
-//}
-//
-//func setCurrentUser(c *gin.Context, userInfo models.UserBasic) {
-//	session := sessions.Default(c)
-//	session.Set("currentUser", userInfo)
-//	// 一定要Save否则不生效，若未使用gob注册User结构体，调用Save时会返回一个Error
-//	session.Save()
-//}
 
 // CurrentUser
 // @Tags 公共方法
@@ -147,7 +134,7 @@ func OutLogin(c *gin.Context) {
 // @Success 200 {string} json "{"code":"200","data":""}"
 // @Router /api/current-user [get]
 func CurrentUser(c *gin.Context) {
-	data, err := helper.AnalyseToken(define.CurrentUserToken)
+	data, err := helper.AnalyseToken(helper.GetCurrentUser(c))
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
 			"code": -1,
@@ -207,6 +194,7 @@ func SendCode(c *gin.Context) {
 // @Success 200 {string} json "{"code":"200","data":""}"
 // @Router /api/register [post]
 func Register(c *gin.Context) {
+	c.Request.ParseForm()
 	mail := c.PostForm("mail")
 	userCode := c.PostForm("code")
 	name := c.PostForm("name")

@@ -25,15 +25,15 @@ func (table *ProblemBasic) TableName() string {
 	return "problem_basic"
 }
 
-func GetProblemList(keyword, category_identity string) *gorm.DB {
+func GetProblemList(keyword, categoryName string) *gorm.DB {
 
 	tx := DB.Model(new(ProblemBasic)).
 		Preload("ProblemCategories").Preload("ProblemCategories.CategoryBasic").
 		Where("title like ? OR content like ?", "%"+keyword+"%", "%"+keyword+"%")
 
-	if category_identity != "" {
+	if categoryName != "" {
 		tx.Joins("RIGHT JOIN problem_category pc on pc.problem_id = problem_basic.id").
-			Where("pc.category_id = (SELECT cb.id FROM category_basic cb WHERE cb.identity = ?)", category_identity)
+			Where("pc.category_id = (SELECT cb.id FROM category_basic cb WHERE cb.name = ?)", categoryName)
 	}
 
 	return tx

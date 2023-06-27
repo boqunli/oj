@@ -1,0 +1,87 @@
+//@import '~antd/es/style/themes/default.less';
+
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: auto;
+
+  background-image: url('https://mdn.alipayobjects.com/yuyan_qk0oxh/afts/img/V-_oS6r-i7wAAAAAAAAAAAAAFl94AQBr');
+}
+//
+//@media (min-width: @screen-md-min) {
+//  .container {
+//    background-image: url('https://mdn.alipayobjects.com/yuyan_qk0oxh/afts/img/V-_oS6r-i7wAAAAAAAAAAAAAFl94AQBr');
+//    background-size: cover;
+//  }
+//
+//  .content {
+//    padding: 32px 0 24px;
+//  }
+//}
+
+
+.main {
+
+  width: 368px;
+  margin: 100px auto;
+
+  h3 {
+    margin-bottom: 20px;
+    font-size: 20px;
+    text-align: center;
+  }
+
+  .password {
+    margin-bottom: 24px;
+    :global {
+      .ant-form-item-explain {
+        display: none;
+      }
+    }
+  }
+
+  .getCaptcha {
+    display: block;
+    width: 100%;
+  }
+
+  .submit {
+    width: 50%;
+  }
+
+  .login {
+    float: right;
+    line-height: @btn-height-lg;
+  }
+}
+
+.success,
+.warning,
+.error {
+  transition: color 0.3s;
+}
+
+.success {
+  color: rgb(0 255 0);
+}
+
+.warning {
+  color: rgb(255 200 1);
+}
+
+.error {
+  color: rgb(255 0 0);
+}
+
+.progress-pass > .progress {
+  :global {
+    .ant-progress-bg {
+      background-color: rgb(255 200 1);
+    }
+  }
+}
+
+.title {
+  padding: 0;
+}

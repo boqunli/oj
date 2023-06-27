@@ -20,6 +20,11 @@ export default [
         path: '/user/login',
         component: './User/Login',
       },
+      {
+        name: 'login',
+        path: '/user/register',
+        component: './User/Register',
+      },
     ],
   },
   {
@@ -48,8 +53,26 @@ export default [
   {
     path: '/problem',
     name: 'problem',
-    icon: '',
-    redirect: '/welcome',
+    icon: 'table',
+    routes: [
+      {
+        path: '/problem/all',
+        name: 'problem_all',
+        component: './Problem/All',
+      },
+      {
+        path: '/problem/create',
+        name: 'problem_create',
+        component: './Problem/Create',
+        access: 'canAdmin',
+      },
+      {
+        path: '/problem/modify',
+        name: 'problem_modify',
+        component: './Problem/Modify',
+        access: 'canAdmin',
+      },
+    ]
   },
   {
     path: '/',

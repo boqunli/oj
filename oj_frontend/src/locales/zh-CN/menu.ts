@@ -1,5 +1,9 @@
 export default {
   'menu.welcome': '欢迎',
+  'menu.problem' : "问题列表",
+  'menu.problem.problem_create': '创建问题',
+  'menu.problem.problem_all': '全部问题',
+  'menu.problem.problem_modify': '修改问题',
   'menu.more-blocks': '更多区块',
   'menu.home': '首页',
   'menu.admin': '管理页',

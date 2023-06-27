@@ -11,7 +11,7 @@ import {
 } from '@ant-design/pro-components';
 import { useEmotionCss } from '@ant-design/use-emotion-css';
 import { FormattedMessage, history, SelectLang, useIntl, useModel, Helmet } from '@umijs/max';
-import { Alert, message, Tabs } from 'antd';
+import {Alert, Button, message, Tabs} from 'antd';
 import Settings from '../../../../config/defaultSettings';
 import React, { useState } from 'react';
 import { flushSync } from 'react-dom';
@@ -136,12 +136,19 @@ const Login: React.FC = () => {
             minWidth: 280,
             maxWidth: '75vw',
           }}
-          logo={<img alt="logo" src="/logo.png" />}
+          logo={<img alt="logo" src="/logo.svg" />}
           title="My Online Judge"
           subTitle={intl.formatMessage({ id: 'pages.layouts.userLayout.title' })}
           initialValues={{
             autoLogin: true,
           }}
+          actions={
+            <Button
+              style={{width: "100%"}}
+              size="large"
+              href="/user/register"
+            >注册</Button>
+          }
           onFinish={async (values) => {
             await handleSubmit(values as API.LoginParams);
           }}
@@ -241,6 +248,7 @@ const Login: React.FC = () => {
             </a>
           </div>
         </LoginForm>
+
       </div>
       <Footer />
     </div>

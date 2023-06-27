@@ -391,8 +391,8 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
-                        "description": "category_identity",
-                        "name": "category_identity",
+                        "description": "category_name",
+                        "name": "category_name",
                         "in": "query"
                     }
                 ],

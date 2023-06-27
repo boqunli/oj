@@ -5,7 +5,7 @@ workbox.core.setCacheNameDetails({
   prefix: 'antd-pro',
   suffix: 'v5',
 });
-// Control all opened tabs ASAP
+// Control All opened tabs ASAP
 workbox.clientsClaim();
 
 /**
@@ -24,7 +24,7 @@ workbox.routing.registerNavigationRoute('/index.tsx.html');
  * Use runtime cache:
  * https://developers.google.com/web/tools/workbox/reference-docs/latest/workbox.routing#.registerRoute
  *
- * Workbox provides all common caching strategies including CacheFirst, NetworkFirst etc.
+ * Workbox provides All common caching strategies including CacheFirst, NetworkFirst etc.
  * https://developers.google.com/web/tools/workbox/reference-docs/latest/workbox.strategies
  */
 

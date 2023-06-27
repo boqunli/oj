@@ -286,9 +286,9 @@ paths:
         in: query
         name: keyword
         type: string
-      - description: category_identity
+      - description: category_name
         in: query
-        name: category_identity
+        name: category_name
         type: string
       responses:
         "200":

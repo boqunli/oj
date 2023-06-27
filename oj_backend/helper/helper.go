@@ -4,6 +4,8 @@ import (
 	"crypto/md5"
 	"fmt"
 	"github.com/dgrijalva/jwt-go"
+	"github.com/gin-contrib/sessions"
+	"github.com/gin-gonic/gin"
 	"github.com/jordan-wright/email"
 	uuid "github.com/satori/go.uuid"
 	"math/rand"
@@ -170,4 +172,17 @@ func CheckGoCodeValid(path string) (bool, error) {
 		}
 	}
 	return true, nil
+}
+
+func GetCurrentUser(c *gin.Context) (userToken string) {
+	session := sessions.Default(c)
+	userToken = session.Get("currentUser").(string) // 类型转换一下
+	return
+}
+
+func SetCurrentUser(c *gin.Context, userToken string) {
+	session := sessions.Default(c)
+	session.Set("currentUser", userToken)
+	// 一定要Save否则不生效，若未使用gob注册User结构体，调用Save时会返回一个Error
+	session.Save()
 }
