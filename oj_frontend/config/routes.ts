@@ -56,6 +56,10 @@ export default [
     icon: 'table',
     routes: [
       {
+        path: '/problem',
+        redirect: '/problem/all'
+      },
+      {
         path: '/problem/all',
         name: 'problem_all',
         component: './Problem/All',

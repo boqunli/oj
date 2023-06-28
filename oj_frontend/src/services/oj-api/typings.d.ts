@@ -104,6 +104,7 @@ declare namespace API {
     password?: string;
     email?:string;
     captcha?: string;
+    phone?:string
   };
 
   type changePasswordParams = {

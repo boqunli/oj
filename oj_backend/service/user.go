@@ -1,6 +1,7 @@
 package service
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 	"log"
@@ -155,11 +156,23 @@ func CurrentUser(c *gin.Context) {
 // SendCode
 // @Tags 公共方法
 // @Summary 发送验证码
-// @Param email formData string true "email"
+// @Param email body {email: string} true "email"
 // @Success 200 {string} json "{"code":"200","data":""}"
 // @Router /api/send-code [post]
 func SendCode(c *gin.Context) {
-	email := c.PostForm("email")
+	var body struct {
+		Email string `json:"email"`
+	}
+	if err := c.ShouldBindJSON(&body); err != nil {
+		log.Println("[JsonBind Error] : ", err)
+		c.JSON(http.StatusOK, gin.H{
+			"code": -1,
+			"msg":  "参数错误",
+		})
+		return
+	}
+	email := body.Email
+	fmt.Printf("email: %s\n", email)
 	if email == "" {
 		c.JSON(http.StatusOK, gin.H{
 			"code": -1,
@@ -194,7 +207,10 @@ func SendCode(c *gin.Context) {
 // @Success 200 {string} json "{"code":"200","data":""}"
 // @Router /api/register [post]
 func Register(c *gin.Context) {
-	c.Request.ParseForm()
+	err := c.Request.ParseForm()
+	if err != nil {
+		return
+	}
 	mail := c.PostForm("mail")
 	userCode := c.PostForm("code")
 	name := c.PostForm("name")

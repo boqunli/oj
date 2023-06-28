@@ -1,15 +1,16 @@
 import type { FC } from 'react';
-import React, { useState, useEffect } from 'react';
+import React, { useState} from 'react';
 import {Form, Button, Input, Popover, Progress, message, Row, Col} from 'antd';
 // @ts-ignore
 import { Link} from 'umi';
 import styles from './style.less';
-import {register} from "@/services/oj-api/api"
+import {register, sendCode} from "@/services/oj-api/api"
 import {history} from "@@/core/history";
 import {Helmet, SelectLang, useIntl} from "@@/exports";
 import Settings from "../../../../config/defaultSettings";
 import {useEmotionCss} from "@ant-design/use-emotion-css";
 import { Avatar } from 'antd';
+import useCountDown from "@/pages/User/Register/CountDown";
 // import {useEmotionCss} from "@ant-design/use-emotion-css";
 
 const FormItem = Form.Item;
@@ -64,19 +65,14 @@ const passwordProgressMap: {
   poor: 'exception',
 };
 
+const defaultCountDown = 5
 const Register: FC = () => {
   const intl = useIntl();
   const [visible, setVisible]: [boolean, any] = useState(false);
   const [popover, setPopover]: [boolean, any] = useState(false);
+  const [countDown, setCountDown] = useCountDown({mss : 0});
   const confirmDirty = false;
-  let interval: number | undefined;
   const [form] = Form.useForm();
-  useEffect(
-    () => () => {
-      clearInterval(interval);
-    },
-    [interval],
-  );
 
   const getPasswordStatus = () => {
     const value = form.getFieldValue('password');
@@ -119,6 +115,11 @@ const Register: FC = () => {
     return promise.resolve();
   };
 
+  const send = () => {
+    sendCode(form.getFieldValue("email")).then()
+    // @ts-ignore
+    setCountDown(defaultCountDown)
+  }
 
   const renderPasswordProgress = () => {
     const value = form.getFieldValue('password');
@@ -128,7 +129,7 @@ const Register: FC = () => {
         <Progress
           status={passwordProgressMap[passwordStatus]}
           className={styles.progress}
-          strokeWidth={6}
+          size={6}
           percent={value.length * 10 > 100 ? 100 : value.length * 10}
           showInfo={false}
         />
@@ -136,9 +137,6 @@ const Register: FC = () => {
     ) : null;
   };
 
-  const  sendCode = async () => {
-
-  }
   const handleSubmit = async (values: any) => {
     // 登录
     const body: API.RegisterParams = {
@@ -146,6 +144,7 @@ const Register: FC = () => {
       password: values.values.password,
       email: values.values.email,
       captcha: values.values.captcha,
+      phone: values.values.phone
     }
     console.log(body)
     const res = await register(
@@ -166,6 +165,7 @@ const Register: FC = () => {
   };
 
 
+  // @ts-ignore
   return (
     <div className={styles.container}>
       <div className={styles.main}>
@@ -180,21 +180,26 @@ const Register: FC = () => {
         </Helmet>
         <Lang />
 
-        {/*<div*/}
-        {/*  style={{*/}
-        {/*    flex: '1',*/}
-        {/*    padding: '32px 0',*/}
-        {/*  }}*/}
-        {/*>*/}
-        {/*</div>*/}
-        <div style={{paddingBottom:"20px"}}>
+        <div  style={{paddingBottom:"20px"}}>
           <div style={{fontSize:"34px", fontFamily:"Arial, sans-serif"}}>
-            <Avatar
+            <span style={{fontSize: '34px',
+              fontFamily: "system-ui",
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              padding: "20px"}}> <Avatar
               size={60}
               src={'../logo.svg'}
-            />
-            <span style={{margin:"10px"}}>My Online Judge</span>
+            />My Online Judge</span>
           </div>
+          <div style={{
+            fontSize: '16px',
+            fontFamily: "system-ui",
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            padding: "20px"
+          }}>新用户注册</div>
         </div>
 
         <Form form={form} name="UserRegister"
@@ -205,7 +210,7 @@ const Register: FC = () => {
             name="username"
             rules={[{required: true, message: '请输入用户名!',},]}
           >
-          <Input size="large" placeholder="用户名" />
+          <Input addonBefore={"用户名"} size="large" placeholder="用户名" />
 
           </FormItem>
           <Popover
@@ -228,7 +233,6 @@ const Register: FC = () => {
             }
             overlayStyle={{ width: 240 }}
             placement="right"
-            visible={visible}
           >
             <FormItem
               name="password"
@@ -243,7 +247,7 @@ const Register: FC = () => {
                 },
               ]}
             >
-              <Input size="large" type="password" placeholder="至少6位密码，区分大小写" />
+              <Input addonBefore={"密码"} size="large" type="password" placeholder="至少6位密码，区分大小写" />
             </FormItem>
           </Popover>
           <FormItem
@@ -258,7 +262,7 @@ const Register: FC = () => {
               },
             ]}
           >
-          <Input size="large" type="password" placeholder="确认密码" />
+          <Input addonBefore={"确认密码"} size="large" type="password" placeholder="确认密码" />
           </FormItem>
 
           <FormItem
@@ -271,23 +275,27 @@ const Register: FC = () => {
               message: '邮箱不得超过50字符',
             }]}
           >
-          <Input size="large" placeholder="邮箱" />
-
+          <Input addonBefore={"邮箱"} size="large" placeholder="邮箱"/>
+          {/*https://www.cnblogs.com/wang_yb/p/14059148.html*/}
           </FormItem>
           <FormItem
             name="captcha"
             rules={[{ required: true, message: '请输入验证码!' }]}
           >
             <Row>
-              <Col span={18}>
+              <Col span={12}>
                 <Input
+                  addonBefore={"验证码"}
                   size="large"
-                  type="password"
+                  // type="password"
                   placeholder="请输入验证码"
                 />
               </Col>
-              <Col span={6} style={{ float: 'right' }}>
-                <Button type="link" size={"large"} style={{fontWeight: 'bold' }} onClick={sendCode}>发送验证码</Button>
+              <Col span={11} offset={1} style={{ float: 'right' }}>
+              {countDown === 0 ?
+                (<Button block={true} size={"large"} style={{fontWeight: 'bold' }} onClick={send}>发送验证码</Button>)
+                :(<Button block={true} disabled={true} size={"large"} style={{fontWeight: 'bold' }}>{Number(countDown)}秒后重新获取验证码</Button>)
+            }
               </Col>
             </Row>
           </FormItem>
@@ -299,7 +307,7 @@ const Register: FC = () => {
               message: '手机号格式错误！',
             },]}
           >
-            <Input size="large" placeholder="电话号码" />
+            <Input addonBefore={"电话号码"} size="large" placeholder="电话号码" />
           </FormItem>
 
           <FormItem>
