@@ -44,35 +44,50 @@ declare namespace API {
   };
 
   type TestCase = {
+    ID             ?: number;
+    CreatedAt      ?: string;
+    UpdatedAt      ?: string;
+    DeletedAt      ?: string;
+    Identity       ?: string;
+    ProblemIdentity?: string;
     Input          ?: string;
     Output         ?: string;
   }
 
   type CategoryBasic = {
     id        :number;
+    created_at :string;
+    updated_at :string;
+    deleted_at :string;
     identity  :string;
     name      :string;
     parent_id  :number;
   };
 
   type ProblemCategory = {
-    id            :number;
-    created_at :string;
-    updated_at :string;
-    deleted_at :string;
-    problem_id     :number;
-    category_id    :number;
-    category_basic : CategoryBasic;
+    id          ?  :number;
+    created_at ?:string;
+    updated_at ?:string;
+    deleted_at ?:string;
+    problem_id     ?:number;
+    category_id    ?:number;
+    category_basic? : CategoryBasic;
   };
 
   type ProblemItem = {
+    id              ?:  number;
     identity        ?:  string;
-    ProblemCategories?: number[];
+    ProblemCategories?: ProblemCategory[];
     title           ?:  string;
     content         ?:  string;
     max_runtime      ?:  number;
     max_mem          ?:  number;
+    created_at :string;
+    updated_at :string;
+    deleted_at :string;
     test_cases       ?:  TestCase[];
+    pass_num         ?:  number;
+    submit_num       ?:  number;
   };
 
   type RegisterParams = {

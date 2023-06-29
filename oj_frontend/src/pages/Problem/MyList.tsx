@@ -144,8 +144,8 @@ class MyList extends React.Component<any, any> {
                   <Space size={0}>
                     {
                       row.ProblemCategories?.map((item) => {
-                        // console.log(item)
-                        return <Tag color={"blue"} key={item.category_basic.id}>{item.category_basic.name}</Tag>
+                        console.log(item.category_basic)
+                        return <Tag color={"blue"} key={item.category_basic?.id}>{item.category_basic?.name}</Tag>
                       })
                     }
                   </Space>
