@@ -132,6 +132,8 @@ func ProblemCreate(c *gin.Context) {
 		MaxMem:     in.MaxMem,
 		CreatedAt:  time.Time(time.Now()),
 		UpdatedAt:  time.Time(time.Now()),
+		PassNum:    0,
+		SubmitNum:  0,
 	}
 	// 处理分类
 	categoryBasics := make([]*models.ProblemCategory, 0)

@@ -1,6 +1,6 @@
 import { ProList } from '@ant-design/pro-components';
 import {Space, Tag} from 'antd';
-import {GetProblemList} from "@/services/oj-api/api";
+import {GetProblemList} from "@/services/oj-api/api_problem";
 import React from "react";
 import {Pagination} from 'antd';
 import {Input} from 'antd';

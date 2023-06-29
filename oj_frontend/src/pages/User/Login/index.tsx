@@ -1,5 +1,5 @@
 import Footer from '@/components/Footer';
-import { login } from '@/services/oj-api/api';
+import { login } from '@/services/oj-api/api_user';
 import {
   LockOutlined,
   UserOutlined,

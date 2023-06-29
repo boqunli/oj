@@ -43,31 +43,13 @@ declare namespace API {
     autoLogin?: boolean;
   };
 
-  type ErrorResponse = {
-    /** 业务约定的错误码 */
-    errorCode: string;
-    /** 业务上的错误信息 */
-    errorMessage?: string;
-    /** 业务上的请求是否成功 */
-    success?: boolean;
-  };
-
   type TestCase = {
-    ID             ?: number;
-    CreatedAt      ?: string;
-    UpdatedAt      ?: string;
-    DeletedAt      ?: string;
-    Identity       ?: string;
-    ProblemIdentity?: string;
     Input          ?: string;
     Output         ?: string;
   }
 
   type CategoryBasic = {
     id        :number;
-    created_at :string;
-    updated_at :string;
-    deleted_at :string;
     identity  :string;
     name      :string;
     parent_id  :number;
@@ -84,19 +66,13 @@ declare namespace API {
   };
 
   type ProblemItem = {
-    id              ?:  number;
     identity        ?:  string;
-    ProblemCategories?: ProblemCategory[];
+    ProblemCategories?: number[];
     title           ?:  string;
     content         ?:  string;
     max_runtime      ?:  number;
     max_mem          ?:  number;
-    created_at :string;
-    updated_at :string;
-    deleted_at :string;
     test_cases       ?:  TestCase[];
-    pass_num         ?:  number;
-    submit_num       ?:  number;
   };
 
   type RegisterParams = {

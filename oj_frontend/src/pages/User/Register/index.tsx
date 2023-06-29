@@ -4,7 +4,7 @@ import {Form, Button, Input, Popover, Progress, message, Row, Col} from 'antd';
 // @ts-ignore
 import { Link} from 'umi';
 import styles from './style.less';
-import {register, sendCode} from "@/services/oj-api/api"
+import {register, sendCode} from "@/services/oj-api/api_user"
 import {history} from "@@/core/history";
 import {Helmet, SelectLang, useIntl} from "@@/exports";
 import Settings from "../../../../config/defaultSettings";

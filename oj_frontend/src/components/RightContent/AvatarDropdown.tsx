@@ -1,4 +1,4 @@
-import { outLogin } from '@/services/oj-api/api';
+import { outLogin } from '@/services/oj-api/api_user';
 import { LogoutOutlined, SettingOutlined, UserOutlined } from '@ant-design/icons';
 import { useEmotionCss } from '@ant-design/use-emotion-css';
 import { history, useModel } from '@umijs/max';
