@@ -47,26 +47,24 @@ export async function GetProblemList(params: Record<string, any>, options?: {[ke
 
 /** 注册接口 POST /api/register */
 export async function register(body: API.RegisterParams, options?: { [key: string]: any }) {
-  return request<Record<string, any>>( '/api/register', {
+  return request<Record<string, any>>('/api/register', {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/json',
+      'Content-Type': 'multipart/form-data',
     },
-    body: body,
+    data: body,
     ...(options || {}),
   });
 }
 
 /** 验证码接口 POST /api/send-code */
-export async function sendCode(mail: string, options?: { [key: string]: any }) {
+export async function sendCode(body: API.sendCodeParams, options?: { [key: string]: any }) {
   return request<Record<string, any>>( '/api/send-code', {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/json',
+      'Content-Type': 'multipart/form-data',
     },
-    body: {
-      email: mail
-    },
+    data : body,
     ...(options || {}),
   });
 }

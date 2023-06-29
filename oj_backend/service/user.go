@@ -1,7 +1,6 @@
 package service
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 	"log"
@@ -160,19 +159,21 @@ func CurrentUser(c *gin.Context) {
 // @Success 200 {string} json "{"code":"200","data":""}"
 // @Router /api/send-code [post]
 func SendCode(c *gin.Context) {
-	var body struct {
-		Email string `json:"email"`
-	}
-	if err := c.ShouldBindJSON(&body); err != nil {
-		log.Println("[JsonBind Error] : ", err)
-		c.JSON(http.StatusOK, gin.H{
-			"code": -1,
-			"msg":  "参数错误",
-		})
-		return
-	}
-	email := body.Email
-	fmt.Printf("email: %s\n", email)
+	//var body struct {
+	//	Email string `json:"email"`
+	//}
+	//
+	//if err := c.ShouldBindJSON(&body); err != nil {
+	//	log.Println("[JsonBind Error] : ", err)
+	//	c.JSON(http.StatusOK, gin.H{
+	//		"code": -1,
+	//		"msg":  "参数错误",
+	//	})
+	//	return
+	//}
+	//email := body.Email
+	email := c.PostForm("email")
+	//fmt.Printf("email: %s\n", email)
 	if email == "" {
 		c.JSON(http.StatusOK, gin.H{
 			"code": -1,
@@ -199,7 +200,7 @@ func SendCode(c *gin.Context) {
 // Register
 // @Tags 公共方法
 // @Summary 用户注册
-// @Param mail formData string true "mail"
+// @Param email formData string true "email"
 // @Param code formData string true "code"
 // @Param name formData string true "name"
 // @Param password formData string true "password"
@@ -207,16 +208,12 @@ func SendCode(c *gin.Context) {
 // @Success 200 {string} json "{"code":"200","data":""}"
 // @Router /api/register [post]
 func Register(c *gin.Context) {
-	err := c.Request.ParseForm()
-	if err != nil {
-		return
-	}
-	mail := c.PostForm("mail")
+	email := c.PostForm("email")
 	userCode := c.PostForm("code")
 	name := c.PostForm("name")
 	password := c.PostForm("password")
 	phone := c.PostForm("phone")
-	if mail == "" || userCode == "" || name == "" || password == "" {
+	if email == "" || userCode == "" || name == "" || password == "" {
 		c.JSON(http.StatusOK, gin.H{
 			"code": -1,
 			"msg":  "参数不正确",
@@ -224,7 +221,7 @@ func Register(c *gin.Context) {
 		return
 	}
 	// 验证验证码是否正确
-	sysCode, err := models.RDB.Get(c, mail).Result()
+	sysCode, err := models.RDB.Get(c, email).Result()
 	if err != nil {
 		log.Printf("Get Code Error:%v \n", err)
 		c.JSON(http.StatusOK, gin.H{
@@ -242,7 +239,7 @@ func Register(c *gin.Context) {
 	}
 	// 判断邮箱是否已存在
 	var cnt int64
-	err = models.DB.Where("mail = ?", mail).Model(new(models.UserBasic)).Count(&cnt).Error
+	err = models.DB.Where("mail = ?", email).Model(new(models.UserBasic)).Count(&cnt).Error
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
 			"code": -1,
@@ -265,7 +262,7 @@ func Register(c *gin.Context) {
 		Name:      name,
 		Password:  helper.GetMd5(password),
 		Phone:     phone,
-		Mail:      mail,
+		Mail:      email,
 		CreatedAt: time.Time(time.Now()),
 		UpdatedAt: time.Time(time.Now()),
 		IsAdmin:   0,

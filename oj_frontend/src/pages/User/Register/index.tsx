@@ -65,11 +65,12 @@ const passwordProgressMap: {
   poor: 'exception',
 };
 
-const defaultCountDown = 5
+const defaultCountDown = 60
 const Register: FC = () => {
   const intl = useIntl();
   const [visible, setVisible]: [boolean, any] = useState(false);
   const [popover, setPopover]: [boolean, any] = useState(false);
+
   const [countDown, setCountDown] = useCountDown({mss : 0});
   const confirmDirty = false;
   const [form] = Form.useForm();
@@ -116,9 +117,18 @@ const Register: FC = () => {
   };
 
   const send = () => {
-    sendCode(form.getFieldValue("email")).then()
+    sendCode({email: form.getFieldValue("email")} as API.sendCodeParams).then(r=>{
+        if(r.code === -1) {
+          message.error(form.getFieldValue("email")+":"+ r.msg);
+        } else {
+          // @ts-ignore
+          setCountDown(defaultCountDown)
+        }
+      }
+    )
+    // console.log(form.getFieldValue("email"))
     // @ts-ignore
-    setCountDown(defaultCountDown)
+
   }
 
   const renderPasswordProgress = () => {
@@ -140,16 +150,14 @@ const Register: FC = () => {
   const handleSubmit = async (values: any) => {
     // 登录
     const body: API.RegisterParams = {
-      username: values.values.username,
+      name: values.values.username,
       password: values.values.password,
       email: values.values.email,
-      captcha: values.values.captcha,
+      code: values.values.captcha,
       phone: values.values.phone
     }
     console.log(body)
-    const res = await register(
-      body
-    );
+    const res = await register(body);
     console.log(res)
     if (res.code === 200) {
       const defaultRegisterSuccessMessage = intl.formatMessage({

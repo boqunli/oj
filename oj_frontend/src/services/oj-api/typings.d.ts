@@ -100,10 +100,10 @@ declare namespace API {
   };
 
   type RegisterParams = {
-    username?: string;
+    name?: string;
     password?: string;
     email?:string;
-    captcha?: string;
+    code?: string;
     phone?:string
   };
 
@@ -111,4 +111,8 @@ declare namespace API {
     username?: string;
     password?: string;
   };
+
+  type sendCodeParams = {
+    email?: string;
+  }
 }
