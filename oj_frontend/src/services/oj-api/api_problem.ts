@@ -14,7 +14,7 @@ export async function GetProblemList(params: Record<string, any>, options?: {[ke
   })
 }
 
-export async function CreateProblem(data: API.ProblemItem, options?: {[key:string]:any}) {
+export async function CreateProblem(data: API.CreateProblemParam, options?: {[key:string]:any}) {
   return  request<Record<string, any>>('/api/problem-create', {
     method: 'POST',
     headers: {
