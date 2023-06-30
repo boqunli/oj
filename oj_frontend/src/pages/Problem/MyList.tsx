@@ -46,7 +46,7 @@ class MyList extends React.Component<any, any> {
       keyword : k
     })
     this.loadData(this.state.pageNumber, this.state.pageSize, k, this.state.category).then()
-    console.log(this.state.dataSource)
+    // console.log(this.state.dataSource)
 
   }
 
@@ -55,7 +55,7 @@ class MyList extends React.Component<any, any> {
       category : c
     })
     this.loadData(this.state.pageNumber, this.state.pageSize, this.state.keyword, c).then()
-    console.log(this.state.dataSource)
+    // console.log(this.state.dataSource)
 
   }
 
@@ -144,7 +144,7 @@ class MyList extends React.Component<any, any> {
                   <Space size={0}>
                     {
                       row.ProblemCategories?.map((item) => {
-                        console.log(item)
+                        // console.log(item)
                         return <Tag color={"blue"} key={item.category_basic?.id}>{item.category_basic?.name}</Tag>
                       })
                     }
@@ -171,8 +171,8 @@ class MyList extends React.Component<any, any> {
             pageSize={this.state.pageSize}
             current={this.state.pageNumber}
             onChange={(page: any, size: any)=> {
-                this.loadData(page, size).then(r => {
-                  console.log(r)
+                this.loadData(page, size).then(() => {
+                  // console.log(r)
                 })
                 this.setState({
                   pageSize: size,

@@ -3,14 +3,15 @@ import {FC} from "react";
 import MyMenu from "@/pages/Problem/MyMenu";
 import React from 'react';
 import {Layout} from 'antd';
+import MyForm from "@/pages/Problem/Modify/MyForm";
 
 
 const Modify : FC = () => {
   return (
     <Layout>
       <MyMenu current={"modify"}></MyMenu>
-      <div style={{ height: '20px' }}></div>
-      {/*<MyList></MyList>*/}
+      <div style={{ height: '30px' }}></div>
+      <MyForm></MyForm>
     </Layout>
   )
 }

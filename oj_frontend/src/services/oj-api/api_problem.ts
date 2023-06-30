@@ -26,3 +26,15 @@ export async function CreateProblem(body: API.CreateProblemParam,  options?: { [
   })
 }
 
+export async function ModifyProblem(body: API.CreateProblemParam,  options?: { [key: string]: any }) {
+  return  request<Record<string, any>>('/api/admin/problem-modify', {
+    method: 'PUT',
+    headers: {
+      'authorization': `${localStorage.getItem('token')}`,
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  })
+}
+
