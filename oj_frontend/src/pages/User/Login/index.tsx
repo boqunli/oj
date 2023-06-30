@@ -95,11 +95,17 @@ const Login: React.FC = () => {
         });
         message.success(defaultLoginSuccessMessage);
         // @ts-ignore
+
         if(localStorage.getItem('token') === null || localStorage.getItem('token') === undefined){
           localStorage.setItem('token','');
         }
-        // @ts-ignore
-        localStorage.setItem('token',msg.data.token);
+        if (values.autoLogin === true) {
+          // @ts-ignore
+          localStorage.setItem('token',msg.data.token);
+        } else {
+          // @ts-ignore
+          sessionStorage.setItem('token', msg.data.token)
+        }
         await fetchUserInfo();
         const urlParams = new URL(window.location.href).searchParams;
         history.push(urlParams.get('redirect') || '/');

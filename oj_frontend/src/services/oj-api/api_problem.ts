@@ -14,6 +14,17 @@ export async function GetProblemList(params: Record<string, any>, options?: {[ke
   })
 }
 
+export async function GetProblemDetail(param: string , options?: {[key:string]:any}) {
+  return  request<Record<string, any>>('/api/problem-detail', {
+    method: 'GET',
+    params: {
+      identity: param
+    },
+    ...(options || {}),
+  })
+}
+
+
 export async function CreateProblem(body: API.CreateProblemParam,  options?: { [key: string]: any }) {
   return  request<Record<string, any>>('/api/admin/problem-create', {
     method: 'POST',
