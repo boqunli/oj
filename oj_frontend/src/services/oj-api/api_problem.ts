@@ -14,13 +14,14 @@ export async function GetProblemList(params: Record<string, any>, options?: {[ke
   })
 }
 
-export async function CreateProblem(data: API.CreateProblemParam, options?: {[key:string]:any}) {
-  return  request<Record<string, any>>('/api/problem-create', {
+export async function CreateProblem(body: API.CreateProblemParam,  options?: { [key: string]: any }) {
+  return  request<Record<string, any>>('/api/admin/problem-create', {
     method: 'POST',
     headers: {
+      'authorization': `${localStorage.getItem('token')}`,
       'Content-Type': 'application/json',
     },
-    body: data,
+    data: body,
     ...(options || {}),
   })
 }

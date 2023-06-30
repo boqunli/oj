@@ -188,7 +188,7 @@ func ProblemCreate(c *gin.Context) {
 // @Router /api/admin/problem-modify [put]
 func ProblemModify(c *gin.Context) {
 	in := new(define.ProblemBasic)
-	err := c.ShouldBindJSON(in)
+	err := c.ShouldBindJSON(&in)
 	if err != nil {
 		log.Println("[JsonBind Error] : ", err)
 		c.JSON(http.StatusOK, gin.H{

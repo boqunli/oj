@@ -97,14 +97,14 @@ declare namespace API {
 
   type CreateProblemParam = {
     identity        ?:  string;
-    ProblemCategories?: number[];
     title           ?:  string;
     content         ?:  string;
+    problem_categories?: number[];
     max_runtime      ?:  number;
     max_mem          ?:  number;
     test_cases       ?:  TestCaseParam[];
-    pass_num         ?:  number;
-    submit_num       ?:  number;
+    // pass_num         ?:  number;
+    // submit_num       ?:  number;
   }
 
   type RegisterParams = {

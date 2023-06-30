@@ -3,15 +3,20 @@ import {Button, Form, Input, message, Space} from 'antd';
 import {MinusCircleOutlined, PlusOutlined} from "@ant-design/icons";
 import React from "react";
 import {CreateProblem} from "@/services/oj-api/api_problem";
+// import CreateProblemParam = API.CreateProblemParam;
+// import {CreateProblem} from "@/services/oj-api/api_problem";
 
 export default () => {
   const [form] = Form.useForm();
   const wid = 600;
   return (
     <ProForm<{
-      name: string;
-      company?: string;
-      useMode?: string;
+      title?: string,
+      content?: string,
+      max_mem?: number,
+      max_runtime?: number,
+      category?: any,
+      testcase?: any,
     }>
       form={form}
       submitter={{
@@ -20,10 +25,28 @@ export default () => {
         }
       }}
       onFinish={async (values) => {
-        console.log(values);
-        const res = await CreateProblem(values as API.CreateProblemParam);
-        if (res.code === 200) {
-          message.success('提交成功');
+        let cate: number[] = []
+        if (values.category !== undefined) {
+          // @ts-ignore
+          cate = Array.from(values.category).map(item => Number(item['category']));
+        }
+        const res = await CreateProblem({
+          title: values.title,
+          content: values.content,
+          max_mem: values.max_mem,
+          max_runtime: values.max_runtime,
+          problem_categories: cate,
+          test_cases: values.testcase,
+        })
+
+
+        if (res === undefined) {
+          message.error("网络请求失败")
+        } else if (res.code === 200) {
+          message.success("创建成功")
+          console.log(res.data)
+        } else  {
+          message.error("创建失败："+ res.msg)
         }
       }}
       params={{}}
@@ -46,6 +69,7 @@ export default () => {
         name="categories"
         // initialValue={defaultData}
         trigger="onValuesChange"
+        style={{width:wid}}
       >
         <Form.List  name="category">
           {(fields, { add, remove }) => (
@@ -88,6 +112,8 @@ export default () => {
         name="testcases"
         // initialValue={defaultData}
         trigger="onValuesChange"
+        style={{width:wid}}
+
       >
         <Form.List  name="testcase">
           {(fields, { add, remove }) => (
@@ -112,7 +138,7 @@ export default () => {
                 </Space>
               ))}
               <Form.Item>
-                <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
+                <Button type="dashed" onClick={() => add()} block={true} icon={<PlusOutlined />}>
                   增加测试用例
                 </Button>
               </Form.Item>

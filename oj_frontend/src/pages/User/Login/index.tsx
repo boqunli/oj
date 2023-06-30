@@ -94,6 +94,12 @@ const Login: React.FC = () => {
           defaultMessage: '登录成功！',
         });
         message.success(defaultLoginSuccessMessage);
+        // @ts-ignore
+        if(localStorage.getItem('token') === null || localStorage.getItem('token') === undefined){
+          localStorage.setItem('token','');
+        }
+        // @ts-ignore
+        localStorage.setItem('token',msg.data.token);
         await fetchUserInfo();
         const urlParams = new URL(window.location.href).searchParams;
         history.push(urlParams.get('redirect') || '/');
