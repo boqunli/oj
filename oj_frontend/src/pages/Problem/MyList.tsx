@@ -4,6 +4,7 @@ import {GetProblemList} from "@/services/oj-api/api_problem";
 import React from "react";
 import {Pagination} from 'antd';
 import {Input} from 'antd';
+import {history} from "@@/core/history";
 
 const {Search} = Input;
 
@@ -109,6 +110,7 @@ class MyList extends React.Component<any, any> {
                 // console.log(record);
               },
               onClick: () => {
+                history.push('/submit/'+ record.identity)
                 console.log(record);
               },
             };

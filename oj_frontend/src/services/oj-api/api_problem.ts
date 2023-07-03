@@ -15,6 +15,7 @@ export async function GetProblemList(params: Record<string, any>, options?: {[ke
 }
 
 export async function GetProblemDetail(param: string , options?: {[key:string]:any}) {
+  console.log(param)
   return  request<Record<string, any>>('/api/problem-detail', {
     method: 'GET',
     params: {

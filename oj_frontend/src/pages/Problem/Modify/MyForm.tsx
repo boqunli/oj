@@ -3,6 +3,7 @@ import {Button, Form, Input, message, Space} from 'antd';
 import {MinusCircleOutlined, PlusOutlined} from "@ant-design/icons";
 import React from "react";
 import {CreateProblem, ModifyProblem} from "@/services/oj-api/api_problem";
+import ReactQuill from "react-quill";
 // import CreateProblemParam = API.CreateProblemParam;
 // import {CreateProblem} from "@/services/oj-api/api_problem";
 
@@ -66,12 +67,17 @@ export default () => {
         // tooltip="最长为 24 位"
         placeholder="请输入名称"
       />
-      <ProFormTextArea
-        width={wid}
+
+      <ProForm.Item
+        // style={{width:wid}}
         name="content"
         label="问题描述"
-        placeholder="请输入描述"
-      />
+      >
+        <ReactQuill theme="snow" style={{width:wid*2, height: 300}} />
+      </ProForm.Item>
+
+      <div style={{height:"30px"}}></div>
+      
       <ProForm.Item
         label="问题分类"
         name="categories"

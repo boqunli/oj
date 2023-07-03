@@ -80,6 +80,13 @@ export default [
     ]
   },
   {
+    path: '/submit/:id',
+    name: 'submit',
+    hideChildrenInMenu: true,
+    component: './Submit',
+    icon: "edit"
+  },
+  {
     path: '/',
     redirect: '/welcome',
   },
