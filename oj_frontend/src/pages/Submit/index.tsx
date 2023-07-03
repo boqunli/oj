@@ -27,7 +27,7 @@ interface Option {
 const options: Option[] = [
   {
     value: 'c_cpp',
-    label: 'c_cpp',
+    label: 'c/c++',
   },
   {
     value: 'golang',

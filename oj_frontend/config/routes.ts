@@ -87,6 +87,14 @@ export default [
     icon: "edit"
   },
   {
+    path: '/rank/',
+    name: 'rank',
+    hideChildrenInMenu: true,
+    component: './Rank',
+    icon: "orderedList"
+  },
+
+  {
     path: '/',
     redirect: '/welcome',
   },

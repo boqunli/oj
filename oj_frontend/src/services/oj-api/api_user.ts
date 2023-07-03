@@ -67,4 +67,16 @@ export async function sendCode(body: API.sendCodeParams, options?: { [key: strin
 //   });
 // }
 
+export async function GetRankList(param: {current: string, pageSize: string}, options?: { [key: string]: any }) {
+  return request<Record<string, any>>('/api/rank-list', {
+    params: {
+      page: param.current,
+      size: param.pageSize,
+    },
+    method: 'GET',
+    ...(options || {}),
+  });
+}
+
+
 

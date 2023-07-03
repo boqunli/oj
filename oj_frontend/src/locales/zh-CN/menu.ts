@@ -11,6 +11,7 @@ export default {
   'menu.login': '登录',
   'menu.register': '注册',
   'menu.submit': '题目',
+  'menu.rank': "排行榜",
   'menu.register-result': '注册结果',
   'menu.dashboard': 'Dashboard',
   'menu.dashboard.analysis': '分析页',

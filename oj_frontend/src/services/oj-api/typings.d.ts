@@ -2,6 +2,7 @@
 /* eslint-disable */
 
 declare namespace API {
+
   type CurrentUser = {
     username?: string;
     userid?: string;
@@ -16,6 +17,13 @@ declare namespace API {
       is_admin?: number
     };
   };
+
+  interface TableParams {
+    pagination?: TablePaginationConfig;
+    sortField?: string;
+    sortOrder?: string;
+    filters?: Record<string, FilterValue>;
+  }
 
   type PageParams = {
     current?: number;
@@ -123,4 +131,19 @@ declare namespace API {
   type sendCodeParams = {
     email?: string;
   }
+
+  interface UserInfo {
+    id              ?:   number;
+    identity        ?:   string;
+    name            ?:   string;
+    phone           ?:   string;
+    mail            ?:   string;
+    created_at      ?:   string;
+    updated_at      ?:   string;
+    deleted_at      ?:   string;
+    pass_num        ?:   number;
+    submit_num      ?:   number;
+    is_admin        ?:   number;
+  }
+
 }
