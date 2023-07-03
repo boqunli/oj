@@ -1,8 +1,8 @@
-import {ProForm, ProFormDigit, ProFormText, ProFormTextArea} from '@ant-design/pro-components';
+import {ProForm, ProFormDigit, ProFormText} from '@ant-design/pro-components';
 import {Button, Form, Input, message, Space} from 'antd';
 import {MinusCircleOutlined, PlusOutlined} from "@ant-design/icons";
 import React from "react";
-import {CreateProblem, ModifyProblem} from "@/services/oj-api/api_problem";
+import {ModifyProblem} from "@/services/oj-api/api_problem";
 import ReactQuill from "react-quill";
 // import CreateProblemParam = API.CreateProblemParam;
 // import {CreateProblem} from "@/services/oj-api/api_problem";
@@ -73,11 +73,28 @@ export default () => {
         name="content"
         label="问题描述"
       >
-        <ReactQuill theme="snow" style={{width:wid*2, height: 300}} />
+        <ReactQuill style={{height:wid}} modules={{
+          toolbar: {
+            container: [
+              [{'header': [1, 2, 3, 4, 5, false]}],
+              ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+              [{'script': 'sub'}, {'script': 'super'}],
+              [{'align': []}],
+              [{'color': []}],
+              [{'indent': '-1'}, {'indent': '+1'}],
+              [{'list': 'ordered'}, {'list': 'bullet'}],
+              [{'direction': 'rtl'}],
+              ['link'],
+              ['code-block'],
+              ['clean'],
+            ],
+            handlers: {},
+          },
+        }}/>
       </ProForm.Item>
 
       <div style={{height:"30px"}}></div>
-      
+
       <ProForm.Item
         label="问题分类"
         name="categories"

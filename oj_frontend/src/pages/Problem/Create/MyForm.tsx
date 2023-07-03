@@ -71,7 +71,7 @@ export default () => {
         <ReactQuill style={{height:wid}} modules={{
           toolbar: {
           container: [
-          [{'header': [1, 2, false]}],
+          [{'header': [1, 2, 3, 4, 5, false]}],
           ['bold', 'italic', 'underline', 'strike', 'blockquote'],
           [{'script': 'sub'}, {'script': 'super'}],
           [{'align': []}],
@@ -79,7 +79,6 @@ export default () => {
           [{'indent': '-1'}, {'indent': '+1'}],
           [{'list': 'ordered'}, {'list': 'bullet'}],
           [{'direction': 'rtl'}],
-          ["formula"],
           ['link'],
           ['code-block'],
           ['clean'],

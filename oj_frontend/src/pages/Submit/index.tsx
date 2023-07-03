@@ -1,20 +1,50 @@
 import React, {useEffect, useState} from 'react';
-import { Button, Divider, Typography } from 'antd';
+import {Button, Divider, message, Typography} from 'antd';
 import { ProCard } from '@ant-design/pro-components';
 import RcResizeObserver from 'rc-resize-observer';
-
-const { Title, Paragraph, Text } = Typography;
+import { Cascader } from 'antd';
+const { Title, Paragraph } = Typography;
 
 import AceEditor from 'react-ace';
 
 import 'ace-builds/src-noconflict/mode-c_cpp';
-import 'ace-builds/src-noconflict/theme-github';
-import 'ace-builds/src-noconflict/ext-language_tools';
-import {GetProblemDetail} from "@/services/oj-api/api_problem";
+import 'ace-builds/src-noconflict/mode-java.js';
+import 'ace-builds/src-noconflict/mode-golang.js';
+import 'ace-builds/src-noconflict/mode-python.js';
 
-function onEditorChange(newValue: any) {
-  console.log('change', newValue);
+
+import 'ace-builds/src-noconflict/theme-github';
+import 'ace-builds/src-noconflict/theme-tomorrow';
+import 'ace-builds/src-noconflict/ext-language_tools';
+import {GetProblemDetail, SubmitCode} from "@/services/oj-api/api_problem";
+
+interface Option {
+  value: string | number;
+  label: string;
+  children?: Option[];
 }
+
+const options: Option[] = [
+  {
+    value: 'c_cpp',
+    label: 'c_cpp',
+  },
+  {
+    value: 'golang',
+    label: 'golang',
+  },
+  {
+    value: 'java',
+    label: 'java',
+  },
+  {
+    value: 'python',
+    label: 'python',
+  },
+
+]
+
+
 
 const Submit: React.FC = () => {
   const [responsive, setResponsive] = useState(false);
@@ -33,19 +63,55 @@ const Submit: React.FC = () => {
     pass_num   : null,
     submit_num : null
   })
+  const [lang, setLang] = useState("golang")
+  const [code, setCode] = useState("")
+  const [msg, setMsg] = useState("")
+  const [pass, setPass] = useState(0)
+  const [total, setTotal] = useState(0)
+  const [isLoading, setIsLoading] = useState(false)
+  const param = window.location.href.split("/")[window.location.href.split("/").length-1]
+  const onChangeLanguage = (v: any) => {
+    console.log(v)
+    if (v) {
+      setLang(v[0])
+    }
+  }
+
+  function onEditorChange(newValue: any) {
+    setCode(newValue);
+  }
+
 
   useEffect(() => {
-    const param = window.location.href.split("/")[window.location.href.split("/").length-1]
     console.log(param)
+    if (param === ":id") {
+      history.back()
+    }
     GetProblemDetail(param).then((r)=> {
-      console.log(r)
         if (r.code === 200) {
           setData(r.data)
         }
       }
     )
-  }, [])
+  }, [param])
 
+  const onSubmit = () => {
+    setIsLoading(true)
+    SubmitCode({problem: param, code: code}).then((r) => {
+      if (r.code === 200) {
+        setMsg(r.data.msg)
+        setPass(r.data.pass_num)
+        setTotal(r.data.case_num)
+        console.log(r.data)
+      } else {
+        message.error("提交失败")
+      }
+      setIsLoading(false)
+
+    })
+  }
+
+  // @ts-ignore
   return (
     <>
       {/* <PageContainer > */}
@@ -70,66 +136,27 @@ const Submit: React.FC = () => {
           <ProCard colSpan="50%">
             <Title id="intro">{data.id}. {data.title}</Title>
             <Paragraph>
-              {data.content}
+              <div dangerouslySetInnerHTML = {{__html: data.content}} ></div>
             </Paragraph>
-
-            {/*<Title level={3}>示例1</Title>*/}
-            {/*<Paragraph>*/}
-            {/*  <Text code>*/}
-            {/*    输入：s = &quot;aa&quot;, p = &quot;a&quot; 输出：false 解释：&quot;a&quot; 无法匹配*/}
-            {/*    &quot;aa&quot; 整个字符串。*/}
-            {/*  </Text>*/}
-            {/*</Paragraph>*/}
-            {/*<Title level={3}>示例2</Title>*/}
-            {/*<Paragraph>*/}
-            {/*  <Text code>*/}
-            {/*    输入：s = &quot;aa&quot;, p = &quot;a&quot; 输出：false 解释：&quot;a&quot; 无法匹配*/}
-            {/*    &quot;aa&quot; 整个字符串。*/}
-            {/*  </Text>*/}
-            {/*</Paragraph>*/}
-            {/*<Title level={3}>提示</Title>*/}
-
-            {/*<Paragraph>*/}
-            {/*  <ul>*/}
-            {/*    <li>1 &lt;= s.length &lt;= 20</li>*/}
-            {/*    <li>1 &lt;= s.length &lt;= 20</li>*/}
-            {/*    <li>s 只包含从 a-z 的小写字母</li>*/}
-            {/*    <li>p 只包含从 a-z 的小写字母，以及字符 . 和 *。</li>*/}
-            {/*    <li>保证每次出现字符 * 时，前面都匹配到有效的字符</li>*/}
-            {/*  </ul>*/}
-            {/*</Paragraph>*/}
-            {/*<Title level={3}>参考资料</Title>*/}
-            {/*<Paragraph>*/}
-            {/*  <ul>*/}
-            {/*    <li>*/}
-            {/*      <a href="/docs/spec/proximity">资料1</a>*/}
-            {/*    </li>*/}
-            {/*    <li>*/}
-            {/*      <a href="/docs/pattern/navigation">资料2</a>*/}
-            {/*    </li>*/}
-            {/*    <li>*/}
-            {/*      <a href="/docs/resource/download">资料3</a>*/}
-            {/*    </li>*/}
-            {/*  </ul>*/}
-            {/*</Paragraph>*/}
           </ProCard>
           <ProCard
             wrap
             title="代码编辑"
             extra={
+              <>
+              <Cascader defaultValue={["golang"]} options={options} onChange ={onChangeLanguage} placeholder="请选择语言" />
               <Button
-                onClick={(e) => {
-                  console.log(e.target);
-                }}
+                onClick={onSubmit}
               >
                 提交
               </Button>
+              </>
             }
           >
             <AceEditor
-              placeholder="Placeholder Text"
-              mode="go"
-              theme="github"
+              placeholder="your code here"
+              mode={lang}
+              theme="tomorrow"
               name="blah2"
               width="100%"
               // onLoad={this.onLoad}
@@ -138,13 +165,13 @@ const Submit: React.FC = () => {
               showPrintMargin={true}
               showGutter={true}
               highlightActiveLine={false}
-              value={` `}
+              value={code}
               setOptions={{
                 enableBasicAutocompletion: true,
                 enableLiveAutocompletion: true,
                 enableSnippets: true,
                 showLineNumbers: true,
-                tabSize: 2,
+                tabSize: 4,
               }}
             />
             <Divider />
@@ -153,10 +180,12 @@ const Submit: React.FC = () => {
                 console.log(e);
               }}
               extra={<>运行结果</>}
-              bordered
+              bordered={true}
               colSpan={24}
+              loading={isLoading}
+              bodyStyle={{fontSize:"15px"}}
             >
-              <pre className="language-bash">ok</pre>
+              <div className="language-bash">{msg} 通过测试用例 {pass} / {total}</div>
             </ProCard>
           </ProCard>
         </ProCard>

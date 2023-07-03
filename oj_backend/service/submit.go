@@ -127,6 +127,8 @@ func Submit(c *gin.Context) {
 	AC := make(chan int)
 	// 非法代码的channel
 	EC := make(chan struct{})
+	// 超时
+	OOT := make(chan int)
 
 	// 通过的个数
 	passCount := 0
@@ -151,6 +153,7 @@ func Submit(c *gin.Context) {
 		for _, testCase := range pb.TestCases {
 			testCase := testCase
 			go func() {
+				now := time.Now().UnixMilli()
 				cmd := exec.Command("go", "run", path)
 				var out, stderr bytes.Buffer
 				cmd.Stderr = &stderr
@@ -173,7 +176,11 @@ func Submit(c *gin.Context) {
 				}
 				var em runtime.MemStats
 				runtime.ReadMemStats(&em)
-
+				end := time.Now().UnixMilli()
+				if (end - now) >= int64(pb.MaxRuntime) {
+					OOT <- 1
+					return
+				}
 				// 答案错误
 				if testCase.Output+"\n" != out.String() {
 					fmt.Printf("ans  = %s  == %s\n", out.String(), testCase.Output)
@@ -210,14 +217,9 @@ func Submit(c *gin.Context) {
 	case <-AC:
 		msg = "答案正确"
 		sb.Status = 1
-	case <-time.After(time.Millisecond * time.Duration(pb.MaxRuntime)):
-		if passCount == len(pb.TestCases) {
-			sb.Status = 1
-			msg = "答案正确"
-		} else {
-			sb.Status = 3
-			msg = "运行超时"
-		}
+	case <-OOT:
+		sb.Status = 3
+		msg = "运行超时"
 	}
 
 	if err = models.DB.Transaction(func(tx *gorm.DB) error {

@@ -15,7 +15,6 @@ export async function GetProblemList(params: Record<string, any>, options?: {[ke
 }
 
 export async function GetProblemDetail(param: string , options?: {[key:string]:any}) {
-  console.log(param)
   return  request<Record<string, any>>('/api/problem-detail', {
     method: 'GET',
     params: {
@@ -50,3 +49,17 @@ export async function ModifyProblem(body: API.CreateProblemParam,  options?: { [
   })
 }
 
+
+export async function SubmitCode(body: {code: string, problem: string},  options?: { [key: string]: any }) {
+  return  request<Record<string, any>>('/api/user/submit', {
+    method: 'POST',
+    headers: {
+      'authorization': `${localStorage.getItem('token')}`,
+    },
+    params: {
+      problem_identity : body.problem
+    },
+    data: body.code,
+    ...(options || {}),
+  })
+}
