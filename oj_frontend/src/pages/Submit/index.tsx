@@ -102,6 +102,7 @@ const Submit: React.FC = () => {
         setMsg(r.data.msg)
         setPass(r.data.pass_num)
         setTotal(r.data.case_num)
+        message.info(r.data.msg)
         console.log(r.data)
       } else {
         message.error("提交失败")

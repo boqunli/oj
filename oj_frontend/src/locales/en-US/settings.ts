@@ -1,6 +1,6 @@
 export default {
-  'app.settings.menuMap.basic': 'Basic Settings',
-  'app.settings.menuMap.security': 'Security Settings',
+  'app.settings.menuMap.basic': 'Basic Setting',
+  'app.settings.menuMap.security': 'Security Setting',
   'app.settings.menuMap.binding': 'Account Binding',
   'app.settings.menuMap.notification': 'New Message Notification',
   'app.settings.basic.avatar': 'Avatar',

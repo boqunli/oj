@@ -21,35 +21,19 @@ export default [
         component: './User/Login',
       },
       {
-        name: 'login',
+        name: 'register',
         path: '/user/register',
         component: './User/Register',
       },
     ],
   },
+
   {
     path: '/welcome',
     name: 'welcome',
     icon: 'smile',
     component: './Welcome',
   },
-  // {
-  //   path: '/admin',
-  //   name: 'admin',
-  //   icon: 'crown',
-  //   access: 'canAdmin',
-  //   routes: [
-  //     {
-  //       path: '/admin',
-  //       redirect: '/admin/sub-page',
-  //     },
-  //     {
-  //       path: '/admin/sub-page',
-  //       name: 'sub-page',
-  //       component: './Admin ',
-  //     },
-  //   ],
-  // },
   {
     path: '/problem',
     name: 'problem',
@@ -87,11 +71,29 @@ export default [
     icon: "edit"
   },
   {
+    path: '/category',
+    name: 'category',
+    icon: 'tag',
+    component: './Category',
+  },
+  {
     path: '/rank/',
     name: 'rank',
     hideChildrenInMenu: true,
     component: './Rank',
-    icon: "orderedList"
+    icon: "trophy"
+  },
+  {
+    name: 'account',
+    path: '/user/account',
+    icon: 'user',
+    component: './User/Account',
+  },
+  {
+    name: 'setting',
+    icon: 'setting',
+    path: '/user/setting',
+    component: './User/Setting',
   },
 
   {
