@@ -1,4 +1,4 @@
-# my-oj
+# My online judge
 
 #### 代码评测平台
 
@@ -24,3 +24,75 @@
 3.	支持代码提交历史记录的查看和比对，方便用户进行代码版本管理；
 4.	支持题目讨论区，用户可以在讨论区中与其他用户交流问题和经验；
 5.	其他创意的功能。
+
+### 使用方法：
+
+#### 1.后端：Golang、框架：Gin、GORM
++ 安装goland  https://golang.google.cn/dl/  
++ 参考文档 [[Module：https://www.kancloud.cn/aceld/golang/1958311](https://golang.google.cn/tour/welcome/1)https://golang.google.cn/tour/welcome/1](https://golang.google.cn/tour/welcome/1)
++ GIN中文官网：https://gin-gonic.com/zh-cn/docs/
++ GORM中文官网：https://gorm.io/zh_CN/docs/
++ 安装 jwt
+```go get github.com/dgrijalva/jwt-go```
++ 配置
+将 MailPassword 配置到环境变量中
+
+后端构建
+
+```go build -o gin-gorm-oj main.go```
+
+#### 2. 前端： antd pro, react
+
+## Environment Prepare
+
+Install `node_modules`:
+
+```bash
+npm install
+```
+
+or
+
+```bash
+yarn
+```
+
+## Provided Scripts
+
+Ant Design Pro provides some useful script to help you quick start and build with web project, code style check and test.
+
+Scripts provided in `package.json`. It's safe to modify or add additional script:
+
+### Start project
+
+```bash
+npm start
+```
+
+### Build project
+
+```bash
+npm run build
+```
+
+### Check code style
+
+```bash
+npm run lint
+```
+
+You can also use script to auto fix some lint error:
+
+```bash
+npm run lint:fix
+```
+
+### Test code
+
+```bash
+npm test
+```
+
+
+
+
