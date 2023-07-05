@@ -5,7 +5,9 @@ import { request } from '@umijs/max';
 /** 获取当前的用户 GET /api/currentUser */
 export async function currentUser(options?: { [key: string]: any }) {
   return request<{
-    data: API.CurrentUser;
+    data?: API.CurrentUser;
+    code?: number;
+    msg?: string;
   }>('/api/current-user', {
     method: 'GET',
     ...(options || {}),
@@ -92,6 +94,15 @@ export async function GetRankList(param: {current: string, pageSize: string}, op
   });
 }
 
+export async function GetUserDetail(param: string, options?: { [key: string]: any }) {
+  return request<Record<string, any>>('/api/user-detail', {
+    params: {
+      name: param
+    },
+    method: 'GET',
+    ...(options || {}),
+  });
+}
 
 
 

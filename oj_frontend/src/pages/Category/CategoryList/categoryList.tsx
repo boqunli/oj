@@ -45,7 +45,7 @@ const CategoryList: React.FC = () => {
   const [tableParams, setTableParams] = useState<API.TableParams>({
     pagination: {
       current: 1,
-      pageSize: 2,
+      pageSize: 12,
       showQuickJumper: true,
       showSizeChanger: true,
     },

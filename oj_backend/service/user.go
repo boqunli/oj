@@ -16,12 +16,12 @@ import (
 // GetUserDetail
 // @Tags 公共方法
 // @Summary 用户详情
-// @Param identity query string false "user_identity"
+// @Param name query string false "name"
 // @Success 200 {string} json "{"code":"200", "data":""}"
 // @Router /api/user-detail [get]
 func GetUserDetail(c *gin.Context) {
-	identity := c.Query("identity")
-	if identity == "" {
+	name := c.Query("name")
+	if name == "" {
 		c.JSON(http.StatusOK, gin.H{
 			"code": -1,
 			"msg":  "用户标识不能为空",
@@ -29,7 +29,7 @@ func GetUserDetail(c *gin.Context) {
 		return
 	}
 	data := new(models.UserBasic)
-	err := models.DB.Omit("password").Where("identity = ?", identity).First(&data).Error
+	err := models.DB.Omit("password").Where("name = ?", name).First(&data).Error
 	if err != nil {
 		if err == gorm.ErrRecordNotFound {
 			c.JSON(http.StatusOK, gin.H{

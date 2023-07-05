@@ -20,6 +20,11 @@ const columns: ColumnsType<API.UserInfo> = [
     key: 'name',
   },
   {
+    title: '用户标识',
+    dataIndex: 'identity',
+    key: 'identity',
+  },
+  {
     title: '手机号码',
     dataIndex: 'phone',
     key: 'phone',
