@@ -16,6 +16,7 @@ const Account: FC = () => {
       } else if (r.code === -1) {
         console.log("data error")
       } else {
+        // @ts-ignore
         GetUserDetail(r.data.username).then((r)=> {
             if (r.code === 200) {
               setUser(r.data)
