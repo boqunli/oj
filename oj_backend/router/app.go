@@ -29,6 +29,7 @@ func Router() *gin.Engine {
 	api.POST("/register", service.Register)
 	api.GET("/rank-list", service.GetRankList)
 	api.GET("/submit-list", service.GetSubmitList)
+	api.GET("/category-list", service.GetCategoryList)
 
 	api.GET("/current-user", service.CurrentUser)
 

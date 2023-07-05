@@ -63,3 +63,28 @@ export async function SubmitCode(body: {code: string, problem: string},  options
     ...(options || {}),
   })
 }
+
+
+export async function GetCategoryList(params: Record<string, any>, options?: {[key:string]:any}) {
+  return  request<Record<string, any>>('/api/category-list', {
+    method: 'GET',
+    params: {
+      page: params.page,
+      size: params.size,
+      keyword: params.keyword,
+    },
+    ...(options || {}),
+  })
+}
+
+export async function CateCreate(data: Record<string, any>, options?: {[key:string]:any}) {
+  return  request<Record<string, any>>('/api/admin/category-create', {
+    method: 'POST',
+    headers: {
+      'authorization': `${localStorage.getItem('token')}`,
+      'Content-Type': 'multipart/form-data',
+    },
+    params: data,
+    ...(options || {}),
+  })
+}

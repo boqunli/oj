@@ -1,111 +1,53 @@
-import React, {useEffect, useState} from 'react';
-import {message, Table} from 'antd';
-import {GetRankList} from "@/services/oj-api/api_user";
-import type { ColumnsType, TablePaginationConfig } from 'antd/es/table';
-import type { FilterValue, SorterResult } from 'antd/es/table/interface';
-import {v4 as uuid} from 'uuid';
+import React, { useState } from 'react';
+import {AppstoreOutlined, MailOutlined, SettingOutlined, TagOutlined} from '@ant-design/icons';
+import type { MenuProps } from 'antd';
+import {Menu, Space} from 'antd';
+import CategoryList from "@/pages/Category/CategoryList/categoryList";
+import CategoryCreate from "@/pages/Category/CategoryCreate/categoryCreate";
 
-const columns: ColumnsType<API.UserInfo> = [
+const items: MenuProps['items'] = [
   {
-    title: ' ',
-    dataIndex: 'rank',
-    key: 'rank',
-    render: (value, record, index)=> {
-      return <div style={{fontSize:"16px"}}>{index + 1}</div>
-    }
+    label: '分类列表',
+    key: 'list',
+    icon: <TagOutlined />,
   },
   {
-    title: '分类',
-    dataIndex: 'name',
-    key: 'name',
+    label: '分类创建',
+    key: 'create',
+    icon: <AppstoreOutlined />,
   },
   {
-    title: '手机号码',
-    dataIndex: 'phone',
-    key: 'phone',
+    label: '分类修改',
+    key: 'modify',
+    icon: <SettingOutlined />,
   },
-  {
-    title: '邮箱地址',
-    dataIndex: 'mail',
-    key: 'mail',
-  },
-  {
-    title: '提交次数',
-    dataIndex: 'submit_num',
-    key: 'submit_num',
-  },
-  {
-    title: '通过次数',
-    dataIndex: 'pass_num',
-    key: 'pass_num',
-  },
-
 ];
 
-const Rank: React.FC = () => {
-  const [data, setData] = useState<API.UserInfo[]>();
-  const [loading, setLoading] = useState(false);
-  const [tableParams, setTableParams] = useState<API.TableParams>({
-    pagination: {
-      current: 1,
-      pageSize: 12,
-      showQuickJumper: true,
-      showSizeChanger: true,
-    },
+const Category: React.FC = () => {
+  const [current, setCurrent] = useState('list');
 
-  });
-
-  const fetchData = () => {
-    setLoading(true);
-    GetRankList(tableParams.pagination).then((results) => {
-      if (results.code === 200) {
-        setData(results.data.list);
-        setLoading(false);
-        setTableParams({
-          ...tableParams,
-          pagination: {
-            ...tableParams.pagination,
-            total: results.data.count,
-          },
-        });
-      } else {
-        message.error(results.msg)
-      }
-    });
+  const onClick: MenuProps['onClick'] = (e) => {
+    setCurrent(e.key);
   };
 
-  useEffect(() => {
-    fetchData();
-  }, [JSON.stringify(tableParams)]);
+  const renderCategory = () => {
+    if (current === 'list') {
+      return <CategoryList></CategoryList>
+    } else if (current === "create") {
+      return <CategoryCreate></CategoryCreate>
+    } else if (current === "modify") {
 
-  const handleTableChange = (
-    pagination: TablePaginationConfig,
-    filters: Record<string, FilterValue>,
-    sorter: SorterResult<API.UserInfo>,
-  ) => {
-    setTableParams({
-      pagination,
-      filters,
-      ...sorter,
-    });
-
-    // `dataSource` is useless since `pageSize` changed
-    if (pagination.pageSize !== tableParams.pagination?.pageSize) {
-      setData([]);
+    } else  {
+      return <></>
     }
-  };
+  }
 
-  return (
-    <Table
-      columns={columns}
-      dataSource={data}
-      pagination={tableParams.pagination}
-      loading={loading}
-      rowKey={()=>{return uuid()}}
-      // @ts-ignore
-      onChange={handleTableChange}
-    />
-  );
-}
+  return (<>
+    <Menu onClick={onClick} selectedKeys={[current]} mode="horizontal" items={items} />
+      <div style={{height:"40px"}}></div>
+      {renderCategory()}
+    </>
+  )
+};
 
-export default Rank;
+export default Category;
