@@ -40,7 +40,7 @@ const CategoryCreate: React.FC = () => {
         <Form.Item
           label="父类"
           name="parentId"
-          rules={[{required: true, message: 'Please input  parentId!'}]}
+          rules={[{required: false, message: 'Please input  parentId!'}]}
         >
           <InputNumber/>
         </Form.Item>

@@ -44,6 +44,20 @@ export async function register(body: API.RegisterParams, options?: { [key: strin
   });
 }
 
+/** 修改密码 PUT /api/change-info */
+export async function changeInfo(body: API.RegisterParams, options?: { [key: string]: any }) {
+  return request<Record<string, any>>('/api/user/change-info', {
+    method: 'PUT',
+    headers: {
+      'authorization': `${localStorage.getItem('token')}`,
+      'Content-Type': 'multipart/form-data',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
+
 /** 验证码接口 POST /api/send-code */
 export async function sendCode(body: API.sendCodeParams, options?: { [key: string]: any }) {
   return request<Record<string, any>>( '/api/send-code', {
@@ -77,6 +91,8 @@ export async function GetRankList(param: {current: string, pageSize: string}, op
     ...(options || {}),
   });
 }
+
+
 
 
 

@@ -77,14 +77,34 @@ export async function GetCategoryList(params: Record<string, any>, options?: {[k
   })
 }
 
-export async function CateCreate(data: Record<string, any>, options?: {[key:string]:any}) {
+export async function CateCreate(data: {name: string, parentId: number}, options?: {[key:string]:any}) {
   return  request<Record<string, any>>('/api/admin/category-create', {
     method: 'POST',
     headers: {
       'authorization': `${localStorage.getItem('token')}`,
       'Content-Type': 'multipart/form-data',
     },
-    params: data,
+    data: {
+      name: data.name,
+      parentId: data.parentId,
+    },
+    ...(options || {}),
+  })
+}
+
+
+export async function CateModify(data: {identity: string, name: string, parentId: number}, options?: {[key:string]:any}) {
+  return  request<Record<string, any>>('/api/admin/category-modify', {
+    method: 'PUT',
+    headers: {
+      'authorization': `${localStorage.getItem('token')}`,
+      'Content-Type': 'multipart/form-data',
+    },
+    data: {
+      identity: data.identity,
+      name: data.name,
+      parentId: data.parentId,
+    },
     ...(options || {}),
   })
 }

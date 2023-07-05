@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import {AppstoreOutlined, MailOutlined, SettingOutlined, TagOutlined} from '@ant-design/icons';
+import {AppstoreOutlined, SettingOutlined, TagOutlined} from '@ant-design/icons';
 import type { MenuProps } from 'antd';
-import {Menu, Space} from 'antd';
+import {Menu } from 'antd';
 import CategoryList from "@/pages/Category/CategoryList/categoryList";
 import CategoryCreate from "@/pages/Category/CategoryCreate/categoryCreate";
+import CategoryModify from "@/pages/Category/CategoryModify/categoryModify";
 
 const items: MenuProps['items'] = [
   {
@@ -36,7 +37,7 @@ const Category: React.FC = () => {
     } else if (current === "create") {
       return <CategoryCreate></CategoryCreate>
     } else if (current === "modify") {
-
+      return <CategoryModify></CategoryModify>
     } else  {
       return <></>
     }

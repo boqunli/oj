@@ -22,7 +22,7 @@ func AuthUserCheck() gin.HandlerFunc {
 			c.Abort()
 			c.JSON(http.StatusOK, gin.H{
 				"code": http.StatusUnauthorized,
-				"msg":  "Unauthorized Admin",
+				"msg":  "Unauthorized Authorization",
 			})
 			return
 		}

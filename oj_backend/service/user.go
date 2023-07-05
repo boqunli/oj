@@ -293,6 +293,100 @@ func Register(c *gin.Context) {
 	})
 }
 
+// ChangeInfo
+// @Tags 公共方法
+// @Summary 用户信息修改
+// @Param authorization header string true "authorization"
+// @Param name formData string true "name"
+// @Param password formData string true "password"
+// @Param phone formData string false "phone"
+// @Success 200 {string} json "{"code":"200","data":""}"
+// @Router /api/user/change-info [put]
+func ChangeInfo(c *gin.Context) {
+	auth := c.GetHeader("Authorization")
+	userClaim, err := helper.AnalyseToken(auth)
+	if err != nil {
+		c.Abort()
+		c.JSON(http.StatusOK, gin.H{
+			"code": http.StatusUnauthorized,
+			"msg":  "Unauthorized Authorization",
+		})
+		return
+	}
+	if userClaim == nil {
+		c.Abort()
+		c.JSON(http.StatusOK, gin.H{
+			"code": http.StatusUnauthorized,
+			"msg":  "Unauthorized Authorization",
+		})
+		return
+	}
+	name := c.PostForm("name")
+	password := c.PostForm("password")
+	phone := c.PostForm("phone")
+	if name == "" || password == "" {
+		c.JSON(http.StatusOK, gin.H{
+			"code": -1,
+			"msg":  "参数不正确",
+		})
+		return
+	}
+
+	data := new(models.UserBasic)
+	er := models.DB.Where("identity = ?", userClaim.Identity).First(&data).Error
+	if er != nil {
+		if er == gorm.ErrRecordNotFound {
+			c.JSON(http.StatusOK, gin.H{
+				"code": -1,
+				"msg":  "用户不存在",
+			})
+			return
+		}
+		c.JSON(http.StatusOK, gin.H{
+			"code": -1,
+			"msg":  "changeInfo Error",
+		})
+		return
+	}
+
+	// 数据的插入
+	newInfo := &models.UserBasic{
+		Identity:  userClaim.Identity,
+		Name:      name,
+		Password:  helper.GetMd5(password),
+		Phone:     phone,
+		Mail:      data.Mail,
+		CreatedAt: time.Time(time.Now()),
+		UpdatedAt: time.Time(time.Now()),
+		IsAdmin:   data.IsAdmin,
+	}
+	err = models.DB.Model(new(models.UserBasic)).Where("identity = ?", data.Identity).Updates(newInfo).Error
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"code": -1,
+			"msg":  "Update User Error:" + err.Error(),
+		})
+		return
+	}
+
+	// 生成 token
+	token, e := helper.GenerateToken(userClaim.Identity, name, data.IsAdmin)
+	if e != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"code": -1,
+			"msg":  "Generate Token Error:" + e.Error(),
+		})
+		return
+	}
+	helper.SetCurrentUser(c, token)
+	c.JSON(http.StatusOK, gin.H{
+		"code": 200,
+		"data": map[string]interface{}{
+			"token": token,
+		},
+	})
+}
+
 // GetRankList
 // @Tags 公共方法
 // @Summary 用户排行榜

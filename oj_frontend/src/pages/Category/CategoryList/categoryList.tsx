@@ -10,8 +10,8 @@ const columns: ColumnsType<API.CategoryBasic> = [
     title: ' ',
     dataIndex: 'rank',
     key: 'rank',
-    render: (value, record, index)=> {
-      return <div style={{fontSize:"16px"}}>{index + 1}</div>
+    render: (value, record)=> {
+      return <div style={{fontSize:"16px"}}>{record.id}</div>
     }
   },
   {
@@ -45,7 +45,7 @@ const CategoryList: React.FC = () => {
   const [tableParams, setTableParams] = useState<API.TableParams>({
     pagination: {
       current: 1,
-      pageSize: 12,
+      pageSize: 2,
       showQuickJumper: true,
       showSizeChanger: true,
     },
@@ -54,7 +54,7 @@ const CategoryList: React.FC = () => {
 
   const fetchData = () => {
     setLoading(true);
-    GetCategoryList(tableParams.pagination).then((results) => {
+    GetCategoryList({page: tableParams.pagination.current, size: tableParams.pagination.pageSize}).then((results) => {
       if (results.code === 200) {
         setData(results.data.list);
         setLoading(false);
@@ -80,16 +80,16 @@ const CategoryList: React.FC = () => {
     filters: Record<string, FilterValue>,
     sorter: SorterResult<API.CategoryBasic>,
   ) => {
+
+    if (pagination.pageSize !== tableParams.pagination?.pageSize) {
+      setData([]);
+    }
+
     setTableParams({
       pagination,
       filters,
       ...sorter,
     });
-
-    // `dataSource` is useless since `pageSize` changed
-    if (pagination.pageSize !== tableParams.pagination?.pageSize) {
-      setData([]);
-    }
   };
 
   return (

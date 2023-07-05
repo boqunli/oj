@@ -1,14 +1,14 @@
 import type { FC } from 'react';
 import React, { useState} from 'react';
-import {Form, Button, Input, Popover, Progress, message, Row, Col} from 'antd';
+import {Form, Button, Input, Popover, Progress, message,} from 'antd';
 // @ts-ignore
 import styles from './style.less';
-import {register, sendCode} from "@/services/oj-api/api_user"
+import {changeInfo} from "@/services/oj-api/api_user"
 import {history} from "@@/core/history";
 import {Helmet, SelectLang, useIntl} from "@@/exports";
 import Settings from "../../../../config/defaultSettings";
 import {useEmotionCss} from "@ant-design/use-emotion-css";
-import useCountDown from "@/pages/User/Register/CountDown";
+// import useCountDown from "@/pages/User/Register/CountDown";
 // import {useEmotionCss} from "@ant-design/use-emotion-css";
 
 const FormItem = Form.Item;
@@ -63,13 +63,13 @@ const passwordProgressMap: {
   poor: 'exception',
 };
 
-const defaultCountDown = 60
+// const defaultCountDown = 60
 const Setting: FC = () => {
   const intl = useIntl();
   const [visible, setVisible]: [boolean, any] = useState(false);
   const [popover, setPopover]: [boolean, any] = useState(false);
 
-  const [countDown, setCountDown] = useCountDown({mss : 0});
+  // const [countDown, setCountDown] = useCountDown({mss : 0});
   const confirmDirty = false;
   const [form] = Form.useForm();
 
@@ -114,20 +114,20 @@ const Setting: FC = () => {
     return promise.resolve();
   };
 
-  const send = () => {
-    sendCode({email: form.getFieldValue("email")} as API.sendCodeParams).then(r=>{
-        if(r.code === -1) {
-          message.error(form.getFieldValue("email")+":"+ r.msg);
-        } else {
-          // @ts-ignore
-          setCountDown(defaultCountDown)
-        }
-      }
-    )
-    // console.log(form.getFieldValue("email"))
-    // @ts-ignore
-
-  }
+  // const send = () => {
+  //   sendCode({email: form.getFieldValue("email")} as API.sendCodeParams).then(r=>{
+  //       if(r.code === -1) {
+  //         message.error(form.getFieldValue("email")+":"+ r.msg);
+  //       } else {
+  //         // @ts-ignore
+  //         setCountDown(defaultCountDown)
+  //       }
+  //     }
+  //   )
+  //   // console.log(form.getFieldValue("email"))
+  //   // @ts-ignore
+  //
+  // }
 
   const renderPasswordProgress = () => {
     const value = form.getFieldValue('password');
@@ -155,18 +155,18 @@ const Setting: FC = () => {
       phone: values.values.phone
     }
     console.log(body)
-    const res = await register(body);
+    const res = await changeInfo(body);
     console.log(res)
     if (res.code === 200) {
-      const defaultRegisterSuccessMessage = intl.formatMessage({
-        id: 'pages.register.success',
-        defaultMessage: '注册成功！\n 正在跳转到登录界面...',
+      const defaultSuccessMessage = intl.formatMessage({
+        id: 'pages.changeInfo.success',
+        defaultMessage: '修改成功！\n 正在跳转到登录界面...',
       });
       const handleClose = () => {
         const urlParams = new URL(window.location.href).searchParams;
         history.push(urlParams.get('redirect') || '/user/login');
       }
-      message.success(defaultRegisterSuccessMessage, 3, handleClose);
+      message.success(defaultSuccessMessage, 3, handleClose);
     }
   };
 
@@ -261,40 +261,40 @@ const Setting: FC = () => {
           <Input addonBefore={"确认密码"} size="large" type="password" placeholder="确认密码" />
           </FormItem>
 
-          <FormItem
-            name="email"
-            rules={[{required: true, message: '请输入邮箱',},{
-              pattern: /^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z0-9]{2,6}$/,
-              message: '邮箱格式不正确',
-            }, {
-              max: 50,
-              message: '邮箱不得超过50字符',
-            }]}
-          >
-          <Input addonBefore={"邮箱"} size="large" placeholder="邮箱"/>
-          {/*https://www.cnblogs.com/wang_yb/p/14059148.html*/}
-          </FormItem>
-          <FormItem
-            name="captcha"
-            rules={[{ required: true, message: '请输入验证码!' }]}
-          >
-            <Row>
-              <Col span={12}>
-                <Input
-                  addonBefore={"验证码"}
-                  size="large"
-                  // type="password"
-                  placeholder="请输入验证码"
-                />
-              </Col>
-              <Col span={11} offset={1} style={{ float: 'right' }}>
-              {countDown === 0 ?
-                (<Button block={true} size={"large"} style={{fontWeight: 'bold' }} onClick={send}>发送验证码</Button>)
-                :(<Button block={true} disabled={true} size={"large"} style={{fontWeight: 'bold' }}>{Number(countDown)}秒后重新获取验证码</Button>)
-            }
-              </Col>
-            </Row>
-          </FormItem>
+          {/*<FormItem*/}
+          {/*  name="email"*/}
+          {/*  rules={[{required: true, message: '请输入邮箱',},{*/}
+          {/*    pattern: /^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z0-9]{2,6}$/,*/}
+          {/*    message: '邮箱格式不正确',*/}
+          {/*  }, {*/}
+          {/*    max: 50,*/}
+          {/*    message: '邮箱不得超过50字符',*/}
+          {/*  }]}*/}
+          {/*>*/}
+          {/*<Input addonBefore={"邮箱"} size="large" placeholder="邮箱"/>*/}
+          {/*/!*https://www.cnblogs.com/wang_yb/p/14059148.html*!/*/}
+          {/*</FormItem>*/}
+          {/*<FormItem*/}
+          {/*  name="captcha"*/}
+          {/*  rules={[{ required: true, message: '请输入验证码!' }]}*/}
+          {/*>*/}
+          {/*  <Row>*/}
+          {/*    <Col span={12}>*/}
+          {/*      <Input*/}
+          {/*        addonBefore={"验证码"}*/}
+          {/*        size="large"*/}
+          {/*        // type="password"*/}
+          {/*        placeholder="请输入验证码"*/}
+          {/*      />*/}
+          {/*    </Col>*/}
+          {/*    <Col span={11} offset={1} style={{ float: 'right' }}>*/}
+          {/*    {countDown === 0 ?*/}
+          {/*      (<Button block={true} size={"large"} style={{fontWeight: 'bold' }} onClick={send}>发送验证码</Button>)*/}
+          {/*      :(<Button block={true} disabled={true} size={"large"} style={{fontWeight: 'bold' }}>{Number(countDown)}秒后重新获取验证码</Button>)*/}
+          {/*  }*/}
+          {/*    </Col>*/}
+          {/*  </Row>*/}
+          {/*</FormItem>*/}
 
           <FormItem
             name="phone"

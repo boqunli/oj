@@ -54,6 +54,7 @@ func Router() *gin.Engine {
 	authUser := api.Group("/user", middlewares.AuthUserCheck())
 	//// 代码提交
 	authUser.POST("/submit", service.Submit)
+	authUser.PUT("/change-info", service.ChangeInfo)
 
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 
