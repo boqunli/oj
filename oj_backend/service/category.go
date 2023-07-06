@@ -1,7 +1,6 @@
 package service
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"
@@ -65,7 +64,6 @@ func CategoryCreate(c *gin.Context) {
 		return
 	}
 	name := c.PostForm("name")
-	fmt.Printf("name = %s\n", name)
 	parentId, _ := strconv.Atoi(c.PostForm("parentId"))
 	category := &models.CategoryBasic{
 		Identity:  helper.GetUUID(),
