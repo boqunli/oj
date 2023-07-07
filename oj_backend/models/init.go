@@ -10,13 +10,13 @@ import (
 var DB *gorm.DB = Init()
 
 var RDB = redis.NewClient(&redis.Options{
-	Addr:     "localhost:6379",
-	Password: "", // no password set
-	DB:       0,  // use default DB
+	Addr:     "123.60.91.107:6379",
+	Password: "123456", // no password set
+	DB:       0,        // use default DB
 })
 
 func Init() *gorm.DB {
-	dsn := "root:@tcp(127.0.0.1:3306)/oj?charset=utf8mb4&parseTime=True&loc=Local"
+	dsn := "root:123456@tcp(123.60.91.107:13306)/oj?charset=utf8mb4&parseTime=True&loc=Local"
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
 		log.Println("gorm init error", err)
