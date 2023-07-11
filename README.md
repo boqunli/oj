@@ -103,9 +103,11 @@ npm test
 
 # 部署
 
+推荐使用 docker-compose 一键部署
 
+### 分步部署
 
-### 后端部署
+##### 后端部署
 
 ##### oj_backend
 
@@ -181,7 +183,191 @@ docker run --name mysql -d -p 3306:3306 -v /root/boqun/oj/oj_backend/data/mysql/
 docker run -itd --name redis-test -p 6379:6379 redis:6.2.6 --requirepass "123456"
 ```
 
+##### 部署前端
 
+使用nginx 部署
+
+```dockerfile
+ # 配置nginx
+  nginx:
+    image: nginx:latest
+    container_name: oj_frontend
+    ports:
+      - "8000:8000" # 注意此处配置的端口要和nginx.conf文件中监听的端口一致
+    volumes:
+      - ./oj_frontend/dist:/usr/local/nginx/html
+      - ./oj_frontend/nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./oj_frontend/nginx/logs:/var/log/nginx
+    networks:
+      - oj_net
+
+```
+
+其中nginx配置文件
+
+nginx.conf
+
+```nginx
+
+user  nginx;
+worker_processes  auto;
+
+error_log  /var/log/nginx/error.log notice;
+pid        /var/run/nginx.pid;
+
+
+events {
+    worker_connections  1024;
+}
+
+
+http {
+    include       /etc/nginx/mime.types;
+    default_type  application/octet-stream;
+
+    log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
+                      '$status $body_bytes_sent "$http_referer" '
+                      '"$http_user_agent" "$http_x_forwarded_for"';
+
+    access_log  /var/log/nginx/access.log  main;
+
+    sendfile        on;
+    #tcp_nopush     on;
+
+    keepalive_timeout  65;
+
+    #gzip  on;
+    root /usr/share/nginx/html/dist;
+    include /etc/nginx/conf.d/*.conf;
+
+
+    server{
+       listen 8000;
+       charset utf-8;
+       server_name 123.60.91.107;
+        location / {
+            # 用于配合 browserHistory使用
+            root /usr/share/nginx/html/dist;
+            index index.html index.htm;
+            try_files $uri $uri/ /index.html;
+
+            # 如果有资源，建议使用 https + http2，配合按需加载可以获得更好的体验
+            # rewrite ^/(.*)$ https://preview.pro.ant.design/$1 permanent;
+
+        }
+        location /api {
+            proxy_pass http://123.60.91.107:8080;
+            proxy_redirect default;
+        }
+    }
+}
+```
+
+default.conf
+
+```nginx
+
+# 服务器配置
+server {
+    listen 8000;
+    # server_name oj_frontend;
+
+    # 静态文件位置
+    root /usr/share/nginx/html/dist;
+    index index.html;
+
+    # 静态文件缓存
+    location ~* \.(jpg|jpeg|png|gif|ico|css|js)$ {
+        expires 1y;
+    }
+
+    # # 反向代理到后端应用
+    # location /api {
+    #     proxy_pass http://localhost:8080;
+    # }
+
+    # 错误页面处理
+    error_page 404 /404.html;
+    error_page 500 502 503 504 /50x.html;
+
+    location = /50x.html {
+        root /usr/share/nginx/html/dist
+    ;
+    }
+}
+```
+
+
+
+#### 使用docker-compose 一键部署
+
+```dockerfile
+version: '3' # docker-compose的版本号
+
+services:
+  oj_backend: # 服务名唯一，配置amieemc后台服务
+    build: # 启动服务时先将build指令中的Dockerfile打包成镜像，再去运行镜像，镜像名会带有前缀（当前的目录名）
+      context: ./oj_backend #指定Dockerfile所在的上下文目录，"."表示当前目录
+      dockerfile: Dockerfile # Dockerfile文件名称
+    container_name: oj_backend # 容器名称
+    volumes: 
+      - ./oj_backend:/usr/local/oj_backend # 挂载宿主机上的后端文件目录到容器中对应的目录下，需要提前创建好主机上的目录
+    ports:
+      - "8080:8080" # 宿主主机端口号:容器端口号
+    depends_on: # 服务依赖的其他服务，按照指定的顺序先启动依赖的服务，再启动后端项目服务
+      - mysql
+      - redis
+      - nginx
+    networks:
+      - oj_net
+  
+  # 配置redis
+  redis:
+    image: redis:6.2.6 # redis镜像 
+    container_name: oj_redis # redis镜像的容器名称
+    ports:
+      - "6379:6379" # 主机端口和容器端口的映射，后台项目服务中application.yml中的redis配置的端口，要为主机端口
+    volumes:
+      - ./oj_backend/data/redis:/data # 挂载Redis存储数据目录到容器中，持久化数据库数据，避免因容器停止导致数据丢失的情况
+    command: "redis-server --appendonly yes --requirepass 123456" #此命令用来覆盖容器默认命令
+    networks:
+      - oj_net
+  
+  ## 配置mysql
+  mysql:
+    image: mysql:5.7
+    container_name: oj_mysql
+    volumes:
+      - ./oj_backend/data/mysql/log:/var/log/mysql
+      - ./oj_backend/data/mysql/data:/var/lib/mysql
+      - ./oj_backend/data/mysql/conf:/etc/mysql/conf.d
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=123456
+      - MYSQL_DATABASE=oj
+    command: --explicit_defaults_for_timestamp
+    networks:
+      - oj_net
+
+  # 配置nginx
+  nginx:
+    image: nginx:latest
+    container_name: oj_frontend
+    ports:
+      - "8000:8000" # 注意此处配置的端口要和nginx.conf文件中监听的端口一致
+    volumes:
+      - ./oj_frontend/dist:/usr/share/nginx/html/dist
+      - ./oj_frontend/nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./oj_frontend/nginx/default.conf:/etc/nginx/conf.d/default.conf
+      - ./oj_frontend/nginx/logs:/var/log/nginx
+    networks:
+      - oj_net
+
+networks:
+  oj_net:
+    driver: bridge
+```
 
 
 

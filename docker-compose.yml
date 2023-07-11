@@ -10,7 +10,7 @@ services:
       - ./oj_backend:/usr/local/oj_backend # 挂载宿主机上的后端文件目录到容器中对应的目录下，需要提前创建好主机上的目录
     ports:
       - "8080:8080" # 宿主主机端口号:容器端口号
-    depends_on: # amieemc服务依赖的其他服务，按照指定的顺序先启动依赖的服务，再启动后端项目服务
+    depends_on: # 服务依赖的其他服务，按照指定的顺序先启动依赖的服务，再启动后端项目服务
       - mysql
       - redis
       - nginx
@@ -34,13 +34,15 @@ services:
     image: mysql:5.7
     container_name: oj_mysql
     volumes:
-      - ./oj_backend/data/mysql:/var/lib/mysql
-      - ./oj_backend/sql:/docker-entrypoint-initdb.d/
+      - ./oj_backend/data/mysql/log:/var/log/mysql
+      - ./oj_backend/data/mysql/data:/var/lib/mysql
+      - ./oj_backend/data/mysql/conf:/etc/mysql/conf.d
     ports:
       - "3306:3306"
     environment:
       - MYSQL_ROOT_PASSWORD=123456
       - MYSQL_DATABASE=oj
+    command: --explicit_defaults_for_timestamp
     networks:
       - oj_net
 
@@ -51,8 +53,9 @@ services:
     ports:
       - "8000:8000" # 注意此处配置的端口要和nginx.conf文件中监听的端口一致
     volumes:
-      - ./oj_frontend/dist:/usr/local/nginx/html
+      - ./oj_frontend/dist:/usr/share/nginx/html/dist
       - ./oj_frontend/nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./oj_frontend/nginx/default.conf:/etc/nginx/conf.d/default.conf
       - ./oj_frontend/nginx/logs:/var/log/nginx
     networks:
       - oj_net
