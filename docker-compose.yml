@@ -1,0 +1,62 @@
+version: '3' # docker-compose的版本号
+
+services:
+  oj_backend: # 服务名唯一，配置amieemc后台服务
+    build: # 启动服务时先将build指令中的Dockerfile打包成镜像，再去运行镜像，镜像名会带有前缀（当前的目录名）
+      context: ./oj_backend #指定Dockerfile所在的上下文目录，"."表示当前目录
+      dockerfile: Dockerfile # Dockerfile文件名称
+    container_name: oj_backend # 容器名称
+    volumes: 
+      - ./oj_backend:/usr/local/oj_backend # 挂载宿主机上的后端文件目录到容器中对应的目录下，需要提前创建好主机上的目录
+    ports:
+      - "8080:8080" # 宿主主机端口号:容器端口号
+    depends_on: # amieemc服务依赖的其他服务，按照指定的顺序先启动依赖的服务，再启动后端项目服务
+      - mysql
+      - redis
+      - nginx
+    networks:
+      - oj_net
+  
+  # 配置redis
+  redis:
+    image: redis:6.2.6 # redis镜像 
+    container_name: oj_redis # redis镜像的容器名称
+    ports:
+      - "6379:6379" # 主机端口和容器端口的映射，后台项目服务中application.yml中的redis配置的端口，要为主机端口
+    volumes:
+      - ./oj_backend/data/redis:/data # 挂载Redis存储数据目录到容器中，持久化数据库数据，避免因容器停止导致数据丢失的情况
+    command: "redis-server --appendonly yes --requirepass 123456" #此命令用来覆盖容器默认命令
+    networks:
+      - oj_net
+  
+  ## 配置mysql
+  mysql:
+    image: mysql:5.7
+    container_name: oj_mysql
+    volumes:
+      - ./oj_backend/data/mysql:/var/lib/mysql
+      - ./oj_backend/sql:/docker-entrypoint-initdb.d/
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=123456
+      - MYSQL_DATABASE=oj
+    networks:
+      - oj_net
+
+  # 配置nginx
+  nginx:
+    image: nginx:latest
+    container_name: oj_frontend
+    ports:
+      - "8000:8000" # 注意此处配置的端口要和nginx.conf文件中监听的端口一致
+    volumes:
+      - ./oj_frontend/dist:/usr/local/nginx/html
+      - ./oj_frontend/nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./oj_frontend/nginx/logs:/var/log/nginx
+    networks:
+      - oj_net
+
+networks:
+  oj_net:
+    driver: bridge
